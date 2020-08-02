@@ -4,7 +4,7 @@ library(taxize)
 
 args <- commandArgs(trailingOnly = TRUE)
 input_file  <- args[2] 
-output_file <- args[1]
+output_file <- paste("datasets_derived/annotated_sequences/",args[1], ".csv", sep = "")
 
 blast <- read.csv(input_file, header = FALSE)
 
