@@ -1,23 +1,25 @@
-library(ape)
 library(taxize)
 library(memoise)
-library(dplyr)
-library(tidyr)
+library(tidyverse)
 library(phylotools)
-message("Loaded")
 
 main <- function() {
 
-odonate_ref <- read.FASTA("datasets_primary/sequencing/odonata_reference_seqs.fas")
-mite_ref    <- read.FASTA("datasets_primary/sequencing/arachnida_reference_seqs.fas")
-refseq <- c(odonate_ref, mite_ref)
-rm(odonate_ref)
-rm(mite_ref) # These are kinda, big, I don't really want to keep them around...
-outfile <- "datasets_derived/sequencing/reference_db.fas"
-write.dna(refseq, outfile, format = "fasta")
+odonate_ref <- read.fasta("datasets_primary/sequencing/odonata_reference_seqs.fas")
+mite_ref    <- read.fasta("datasets_primary/sequencing/arachnida_reference_seqs.fas")
+refseq <- bind_rows(odonate_ref, mite_ref)
+rm(odonate_ref); rm(mite_ref) # These are kinda, big, I don't really want to keep them around...
+
+# DADA2 doesn't support any non ACTG characters in the sequence. Remove - used for alignment
+refseq$seq.text <- lapply(refseq$seq.text, function(x) str_replace_all(x, "-", ""))
+
+outfile <- "datasets_derived/sequencing/reference_db.fasta"
+dat2fasta(refseq, outfile)
 message("FASTA files loaded")
-sppnames <- lapply(names(refseq), FUN = function(x) unlist(strsplit(as.character(x), "\\|"))[2])
-limit = length(sppnames) # One-stop for doing this on a limited set for debugging purposes
+
+sppnames <- lapply(refseq$seq.name, FUN = function(x) unlist(strsplit(as.character(x), "\\|"))[2])
+limit = length(sppnames) 
+#limit = 5 # One-stop for doing this on a limited set for debugging purposes
 
 
 taxonomies <- data.frame(phylum = character(0), class = character(0), order = character(0), 
@@ -35,8 +37,13 @@ while (i <= limit){
   }
 }
 message("Taxonomy information Retrieved")
+
 taxonomies <- unite(taxonomies, taxonomy, sep = ";", na.rm = TRUE)
-reftable <- data.frame(names(refseq[1:limit]), taxonomies)
+taxonomies <- modify(taxonomies, function(x) paste(x, ";", sep = "")) # DADA2 needs each taxonomy line to end with ;
+# Replace spaces with _ in species names, probably useful later on... (can't do this earlier, doesn't match with BOLD)
+taxonomies <- modify(taxonomies, function(x) str_replace_all(x, " ", "_"))
+
+reftable <- data.frame(refseq$seq.name, taxonomies)
 rename.fasta(infile = outfile, ref_table = reftable, outfile = outfile)
 message("Done")
 
