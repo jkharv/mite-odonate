@@ -3,6 +3,8 @@
 
 library(tidyverse)
 
+main <- function() {
+
 samples <- read_csv("datasets_primary/mite_samples.csv")
 mites <- read_csv("datasets_derived/sequencing/annotated_mite_sequences.csv")
 
@@ -33,12 +35,12 @@ mites <- mites %>%
   summarise(across(everything(), sum)) %>% #Sum s/t number indicates number of times an association is detected
   mutate_if(is.numeric, funs(./sum(.))) 
 
+write_csv(mites, "datasets_derived/prob_network.csv")
 
+mites <- mutate(mites, across(is.numeric, Vectorize(function(x) if(x>0){1}else{0})))
+write_csv(mites, "datasets_derived/bin_network.csv")
 
-
-
-
-
+}#main
 
 get_name <- function(x){
   n <- filter(samples, sample_code == substring(x, 2))
@@ -49,3 +51,5 @@ get_name <- function(x){
   }
 }
 get_name <- Vectorize(get_name)
+
+main()
