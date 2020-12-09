@@ -1,29 +1,33 @@
 # Author: Jacob Harvey jakekharvey@gmail.com
 
-if(!require(dada2)){
-  library("devtools")
-  devtools::install_github("benjjneb/dada2", ref="v1.16")
-}
-
 library(dada2)
 library(tidyverse)
 
-seqs <- read.csv("datasets_primary/sequencing/seqtab.nochim_MITE5.csv")
+file_name <- commandArgs(trailingOnly=TRUE)
+file_name <- "seqtab_asv.csv"
+seqs <- read.csv(paste("datasets_derived/sequencing/", file_name, sep = ""))
 seqs <- rename(seqs, sequence = ASV.sequence)
 mite_ref <- "datasets_derived/sequencing/reference_db.fasta"
 
-seqs_tax <- assignTaxonomy(seqs$sequence, mite_ref, tryRC = TRUE)
+message("Assigning taxonomy to sequences.")
+seqs_tax <- assignTaxonomy(seqs$sequence, mite_ref, tryRC = TRUE, multithread = 8)
 seqs_tax <- as.data.frame(seqs_tax)
 seqs_tax <- rownames_to_column(seqs_tax)
 seqs_tax <- rename(seqs_tax, sequence = rowname, phylum = Kingdom, class = Phylum, 
                    order = Class, family = Order, genus = Family, species = Genus)
 
+message("Filtering out non-mite sequences")
 s <- left_join(seqs, seqs_tax, by = "sequence")
 # only interested in mite sequences.
 mites <- filter(s, order == "Trombidiformes")
 
-outfile <- "datasets_derived/sequencing/annotated_mite_sequences.csv"
+
+outfile <- paste("datasets_derived/sequencing/", 
+                 str_extract(file_name, "[:graph:]+(?=\\.)"), 
+                 "_annotated.csv", 
+                 sep="")
 write_csv(mites, outfile)
+message("Done")
 
 
 
