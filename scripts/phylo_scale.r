@@ -23,7 +23,19 @@ phylo_path <- "datasets_primary/phylogeny/FinalOdonatetree.tre"
 phylo <- read.nexus(phylo_path)
 
 
-v1scale <- combinational_phylo_scale(bin_network, phylo, "V36")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #---------------- Combinations Method ----------------------
 
