@@ -39,9 +39,4 @@ facet_plot <- facet_plot(tree, panel = "Phylogenetic Scale", data = mite_points,
 
 print(facet_plot)
 
-
-
 facet_widths(facet_plot, c(3,1))
-
-
-
