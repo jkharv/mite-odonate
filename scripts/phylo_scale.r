@@ -1,8 +1,19 @@
 # Author: Jake Harvey jakekharvey@gmail.com
-# Use the mrf methods to get phylogenetic scale of specialization for each mite. 
+#
+# TODO. Filtering out odonates not in my phylogeny leveas some mites with zeroes
+# all the way through, creating NaNs as scales.
+#
+# TODO. GAM can't fit on the using the full phylogeny because there isn't enough
+# species smapled to estimate all the leaves and internal nodes. Can only estimate
+# as many nodes as I have data points. Must order tips based on distance from sampled
+# tips and discard as many as needed to allow the GAM to fit.
+#
+# TODO. Separate the analysis from the algorithms, put them in their own file.
+#
+# TODO. More permanent solution to MRFtools compatibility issue with Gratia.
+#
 
 library(devtools)
-devtools::install_github("jkharv/MRFtools")
 devtools::install("~/Code/MRFtools")
 
 library(MRFtools)
@@ -22,26 +33,20 @@ bin_network <- bin_network %>%
 phylo_path <- "datasets_primary/phylogeny/FinalOdonatetree.tre"
 phylo <- read.nexus(phylo_path)
 
+# Partial application to fix all the parameters but mite.
+# Also vectorize cause mutate needs this.
+partial_scale <- Vectorize(function(m){combinational_phylo_scale(bin_network, phylo, m)})
 
+mites <- tibble(mite = colnames(bin_network)[-1]) %>%
+  mutate(combo_phylo_scale = partial_scale(mite))
 
-
-
-
-
-
-
-
-
-
-
-
-
+write_csv(mites, "datasets_derived/mite_phylo_scale.csv")
 
 #---------------- Combinations Method ----------------------
 
 combinational_phylo_scale <- function(network, phylo, mite){
-
-  parasitized_only <- filter(network , !!sym(mite) > 0)
+  
+  parasitized_only <- filter(network , !!mite > 0)
   
   combinations <- cross2(parasitized_only$odonate_spp, parasitized_only$odonate_spp)
   node_list <- data.frame(node = numeric(), coef = numeric())
@@ -55,7 +60,9 @@ combinational_phylo_scale <- function(network, phylo, mite){
     node_list <- add_to_df(node_list, mrca, coef)
   }
   
+  #node_depths <- node.depth.edgelength(phylo)
   node_depths <- node.depth.edgelength(phylo)
+  node_depths <- max(node_depths) - node_depths 
   
   z <- node_list %>%
     mutate(weight = coef / sum(node_list$coef)) %>%
@@ -86,7 +93,7 @@ plot(trimmed_phylo)
 
 pmatrix <- mrf_penalty(trimmed_phylo)
 
-#get_edf <- function(){ # I'm thinking update.formula is the way to go.
+#get_edf <- function(){
 # interaction_presence ~ s(odonate_sp, bs= phylo_pen) )
 bin_network$odonate_spp <- factor(bin_network$odonate_spp, levels = rownames(trimmed_phylo))
 levels(bin_network$odonate_spp)
