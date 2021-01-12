@@ -13,9 +13,6 @@
 # TODO. More permanent solution to MRFtools compatibility issue with Gratia.
 #
 
-library(devtools)
-devtools::install("~/Code/MRFtools")
-
 library(MRFtools)
 library(ape)
 library(tidyverse)
