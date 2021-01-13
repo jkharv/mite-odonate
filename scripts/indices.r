@@ -31,7 +31,26 @@ write_csv(mites, "datasets_derived/mite_phylo_scale.csv")
 
 
 x<-tibble(sample = rep("A", 31), mite = bin_network$V1, odonate = bin_network$odonate_spp)
-x<sample2matrix(x)
 
-ph_pd(x, phylo)
-typeof(x$odonate)
+x <- bin_network %>%
+  pivot_longer(2:last_col()) %>%
+  rename(mite = name) %>%
+  arrange(mite) %>%
+  relocate(mite, value, odonate_spp)
+
+# Ok this is literally *exact* code from picante sample2matrix which would not run
+# and gave some inscrutable error. Somehow it runs perfectly not in a function. Fuck R.
+colnames(x) <- c("plot","abund","id")
+y <- tapply(x$abund, list(x$plot, x$id), sum)
+y[is.na(y)] <- 0
+x<-as.data.frame(y)
+
+div <- raoD(x, phylo)
+
+# getMRCA(phylo, c("Leucorrhinia_hudsonica", "Leucorrhinia_hudsonica"))
+# node_depths <- node.depth.edgelength(phylo)
+# node_depths <- max(node_depths) - node_depths 
+# node_depths[370]
+# c<-mrca(phylo)
+# pair <-  c("Leucorrhinia_hudsonica", "Leucorrhinia_hudsonica")
+# c[pair[1], pair[2]]
