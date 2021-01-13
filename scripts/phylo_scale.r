@@ -22,15 +22,17 @@ library(mgcv)
 
 combinational_phylo_scale <- function(network, phylo, mite){
   
-  parasitized_only <- filter(network , !!mite > 0)
+  parasitized_only <- filter(network , !!sym(mite) > 0)
   
   combinations <- cross2(parasitized_only$odonate_spp, parasitized_only$odonate_spp)
   node_list <- data.frame(node = numeric(), coef = numeric())
+  # For some reason idk why I get different results from getMRCA than fram mrca
+  mrcas <- mrca(phylo)
   
   for(pair in combinations){
     
     pair <- unlist(pair)
-    mrca <- getMRCA(phylo, pair)
+    mrca <- mrcas[pair[1], pair[2]]
     coef <- parasitized_only[[which(parasitized_only$odonate_spp == pair[1]), mite]] +
             parasitized_only[[which(parasitized_only$odonate_spp == pair[2]), mite]]
     node_list <- add_to_df(node_list, mrca, coef)
