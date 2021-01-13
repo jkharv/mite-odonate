@@ -32,6 +32,11 @@ samples <- samples %>%
   mutate(odonate_spp = str_replace_all(odonate_spp, " ", "_")) %>%
   mutate(sampling_site = str_replace_all(sampling_site, " ", "_"))
 
+controls <- mites %>%
+  select(contains("neg") | "phylum" | "class" | "order" | "family" | "genus" | "species")
+
+write_csv(controls, "datasets_derived/controls.csv")
+
 mites <- mites %>%
   select(matches("(X[[:digit:]]{4}_[[:digit:]]{1,2})")) %>% #Exclude the control samples
   t() %>%
