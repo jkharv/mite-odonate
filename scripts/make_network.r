@@ -50,5 +50,5 @@ mites <- mites %>%
 
 write_csv(mites, "datasets_derived/prob_network.csv")
 
-mites <- mutate(mites, across(is.numeric, Vectorize(function(x) if(x>0){1}else{0})))
+mites <- mutate(mites, across(is.numeric, ceiling))
 write_csv(mites, "datasets_derived/bin_network.csv")
