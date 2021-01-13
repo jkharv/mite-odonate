@@ -43,7 +43,7 @@ mites <- mites %>%
   as.data.frame() %>%
   rownames_to_column("odonate_spp") %>%
   mutate(odonate_spp = get_name(odonate_spp)) %>% # Getting the spp for each sample code
-  mutate(across(is.numeric, Vectorize(function(x) if(x>0){1}else{0}))) %>% #Threshold, reads -> presence
+  mutate(across(is.numeric, Vectorize(function(x) if(x>1000){1}else{0}))) %>% #Threshold, reads -> presence
   group_by(odonate_spp) %>%
   summarise(across(everything(), sum)) %>% #Sum s/t number indicates number of times an association is detected
   mutate_if(is.numeric, funs(./sum(.))) 
