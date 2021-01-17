@@ -3,8 +3,7 @@
 library(dada2)
 library(tidyverse)
 
-file_name <- commandArgs(trailingOnly=TRUE)
-file_name <- "seqtab_asv.csv"
+file_name <- "mite_sequences.csv"
 seqs <- read.csv(paste("datasets_derived/sequencing/", file_name, sep = ""))
 seqs <- rename(seqs, sequence = ASV.sequence)
 mite_ref <- "datasets_derived/sequencing/reference_db.fasta"

@@ -83,9 +83,11 @@ filvis_disc
 errF <- learnErrors(filtFs.MITES, multithread = ncores)
 errR <- learnErrors(filtRs.MITES, multithread = ncores)
 
-# sanity check - visualize error rates
-plotErrors(errF, nominalQ=TRUE)
-plotErrors(errR, nominalQ=TRUE)
+if(interactive()){
+  # sanity check - visualize error rates
+  plotErrors(errF, nominalQ=TRUE)
+  plotErrors(errR, nominalQ=TRUE)
+}
 
 # Dereplicate the filtered fastq files
 # Combines all identical sequencing reads into into unique sequences with a corresponding abundance. 
@@ -122,8 +124,9 @@ seqtab[,1]
 
 rownames(seqtab)
 
-hist(nchar(getSequences(seqtab)),xlab="Size", ylab="Frequency", main = "ASVs length", xlim=c(240,375), ylim=c(0,800)) 
-
+if(interactive()){
+  hist(nchar(getSequences(seqtab)),xlab="Size", ylab="Frequency", main = "ASVs length", xlim=c(240,375), ylim=c(0,800)) 
+}
 # remove chimeras
 seqtab.nochim <- removeBimeraDenovo(seqtab, method="pooled", multithread=40, verbose=TRUE)
 # Identified  bimeras out of  input sequences.
@@ -183,7 +186,7 @@ save.image("dada2_MITES_JUL6.20.RData")
 seqtab_asv_out <- as.data.frame(t(seqtab.nochim))
 seqtab_asv_out <- rownames_to_column(seqtab_asv_out, var = "ASV.sequence")
   
-write.csv(seqtab_asv_out, file = "datasets_derived/sequencing/seqtab_asv.csv")
+write.csv(seqtab_asv_out, file = "datasets_derived/sequencing/mite_sequences.csv")
 
 
 ### Maybe try to Clump ASVs to OTUs -------------------------
@@ -223,7 +226,7 @@ colnames(merged_seqtab) <- paste0("OTU", colnames(merged_seqtab))
 seqtab_otu_out <- as.data.frame(t(seqtab.nochim))
 seqtab_otu_out <- rownames_to_column(seqtab_otu_out, var = "ASV.sequence")
 
-write.csv(merged_seqtab, file = "datasets_derived/sequencing/seqtab_otu.csv")
+write.csv(merged_seqtab, file = "datasets_derived/sequencing/mite_sequences_otu.csv")
 
 ## Try to make a fasta file of each OTU --------------
 #ASV is column of all the original ASV sequences and C.ASV is the new column of clustered ASVs based on the 
