@@ -17,7 +17,7 @@ samples <- read_csv("datasets_primary/mite_samples.csv")
 mites <- read_csv("datasets_derived/sequencing/mite_sequences_annotated.csv")
 
 samples <- samples %>% 
-  rename(sample_code   = "Sample Code", 
+  rename(sample_code            = "Sample Code", 
          odonate_spp            = "Odonate Species", 
          sampling_site          = "Sampling Site", 
          mites_no               = "Est Num. of Mites", 
@@ -43,10 +43,11 @@ mites <- mites %>%
   as.data.frame() %>%
   rownames_to_column("odonate_spp") %>%
   mutate(odonate_spp = get_name(odonate_spp)) %>% # Getting the spp for each sample code
-  mutate(across(is.numeric, Vectorize(function(x) if(x>1000){1}else{0}))) %>% #Threshold, reads -> presence
+  mutate(across(is.numeric, Vectorize(function(x) if(x>=500){1}else{0}))) %>% #Threshold, reads -> presence
   group_by(odonate_spp) %>%
   summarise(across(everything(), sum)) %>% #Sum s/t number indicates number of times an association is detected
-  mutate_if(is.numeric, funs(./sum(.))) 
+  mutate_if(is.numeric, funs(./sum(.))) %>%
+  select_if(~ !any(is.nan(.))) # Previous op causes div 0 if there are no detections.
 
 write_csv(mites, "datasets_derived/prob_network.csv")
 
