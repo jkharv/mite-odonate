@@ -25,9 +25,39 @@ partial_scale <- Vectorize(function(m){combinational_phylo_scale(bin_network, ph
 mites <- tibble(mite = colnames(bin_network)[-1]) %>%
   mutate(combo_phylo_scale = partial_scale(mite))
 
+#~~~~~~~~~~~~~~~~~~Number of hosts~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+num_hosts <- function(bin_network, mite){
+  
+  mite <- pull(bin_network, mite)
+  n <- sum(mite)
+}
+
+partial_num_hosts <- Vectorize(function(m){num_hosts(bin_network, m)})
+
+mites <- mites %>%
+  mutate(num_host = partial_num_hosts(mite))
+
+#~~~~~~~~~~~~~~~~~~Resource Range~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Number of links normalized by number of possible links.
+# Non-phylogenetic specialization index.
+resource_range <- function(bin_network, mite){
+  
+  mite <- pull(bin_network, mite)
+  R <- length(mite)
+  r <- sum(mite) # Will only work on the binary network.
+  (R - r)/(R - 1)
+}
+
+partial_rr <- Vectorize(function(m){resource_range(bin_network, m)})
+
+mites <- mites %>%
+  mutate(resource_range = partial_rr(mite))
+
 write_csv(mites, "datasets_derived/mite_phylo_scale.csv")
 
-#~~~~~~~~~~~~~~~~~~Specialization indices~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~phylo Specialization index~~~~~~~~~~~~~~~~~
 
 
 x<-tibble(sample = rep("A", 31), mite = bin_network$V1, odonate = bin_network$odonate_spp)
