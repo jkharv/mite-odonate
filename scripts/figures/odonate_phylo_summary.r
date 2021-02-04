@@ -1,1 +1,0 @@
-# Author: Jake Harvey - jakekharvey@gmail.com
