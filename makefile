@@ -20,6 +20,10 @@ datasets_derived/mite_phylo_scale.csv: datasets_derived/bin_network.csv scripts/
 	Rscript scripts/indices.r
 	echo Calculating phylogenetic scale and specialization indices
 
+datasets_derived/odonate_abundances.csv datasets_derived/mite_prevalences.csv: scripts/odonate_summaries.r datasets_primary/2015_data.csv datasets_primary/2019_data.csv datasets_primary/2020_data.csv
+	Rscript scripts/odonate_summaries.r
+	echo Calculating Odonate abundances and mite prevalences
+
 figures/phylo_plot.svg: datasets_derived/mite_phylo_scale.csv scripts/figures/phylo_mite_scale.r
 	Rscript scripts/figures/phylo_mite_scale.r
 
