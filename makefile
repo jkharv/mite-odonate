@@ -1,37 +1,5 @@
 # Author Jake Harvey - jakekharvey@gmail.com
 
-# datasets_primary/
-# 	phylogeny/
-# 		FinalOdonatetree.tre
-#	sequencing/
-#		raw_fastq/
-#		arachnida_reference_seqs.fas
-#		odonata_reference_seqs.fas
-#	mite_samples.csv
-#
-# datasets_derived/
-#	sequencing/
-#		mite_sequences.csv
-#		mite_sequences_annotated.csv
-#		mite_sequences_otu.csv
-#		reference_db.fasta
-#	bin_network.csv
-#	prob_network.csv
-#	controls.csv
-#	mite_phylo_scale.csv
-#
-# scripts/
-#	assign_taxonomy.r
-#	clean_sequences.r
-#	indices.r
-#	install_dependencies.r
-#	make_network.r
-#	mite_reference_db.r
-#	phylo_scale.r
-#	figures/
-#		phylo_mite_scale.r
-#		phylo_scale_histogram.r
-
 datasets_derived/sequencing/mite_sequences.csv datasets_derived/sequencing/mite_sequences_otu.csv: datasets_primary/sequencing/raw_fastq/*.fastq.gz scripts/clean_sequences.r
 	Rscript scripts/clean_sequences.r
 	echo Cleaning raw sequence data
