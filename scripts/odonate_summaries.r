@@ -5,11 +5,13 @@ library(tidyverse)
 a2015 <- read_csv("datasets_primary/2015_data.csv", na = c("", "NA", "N/A"))
 a2019 <- read_csv("datasets_primary/2019_data.csv", na = c("", "NA", "N/A"))
 a2020 <- read_csv("datasets_primary/2020_data.csv", na = c("", "NA", "N/A"))
+network <- read_csv("datasets_derived/bin_network.csv")
+mites <- read_csv("datasets_derived/mite_phylo_scale.csv")
 
 a2015 <- a2015 %>%
   mutate(species = paste(Genus, Species, sep = "_")) %>%
   rename(Mite_Abundance = "Mite Load") %>%
-  filter(species != "Lestes sp" & species != "Aeshna sp") %>%
+  filter(species != "Lestes_sp" & species != "Aeshna_sp") %>%
   drop_na(c(Species, Mite_Abundance)) %>%
   select(c(species, Mite_Abundance))
 
@@ -45,5 +47,24 @@ all_data <- all_data %>%
   summarise_all(sum) %>%
   mutate(prevalence = Mite_Abundance/abundance)
 
-write_csv(abundances, "datasets_derived/odonate_abundances.csv")
-write_csv(abundances, "datasets_derived/mite_prevalences.csv")
+# Get mite statistics at the host-species level.
+get_scale <- Vectorize(function(mite){mites$combo_phylo_scale[which(mites$mite == mite)]})
+get_rr <- Vectorize(function(mite){mites$resource_range[which(mites$mite == mite)]})
+get_hn <- Vectorize(function(mite){mites$num_host[which(mites$mite == mite)]})
+
+mite_points <- network %>% 
+  pivot_longer(2:last_col()) %>%
+  filter(value > 0) %>%
+  rename(mite = name) %>%
+  select(odonate_spp, mite) %>%
+  mutate(mite_scale = get_scale(mite)) %>%
+  mutate(resource_range = get_rr(mite)) %>%
+  mutate(num_host = get_hn(mite)) %>%
+  select(odonate_spp, mite_scale, resource_range, num_host) %>%
+  group_by(odonate_spp) %>%
+  summarise_all(mean) %>%
+  rename(species = odonate_spp)
+
+odonates <- full_join(all_data, mite_points, by = "species")
+
+write_csv(odonates, "datasets_derived/odonate_summaries.csv")
