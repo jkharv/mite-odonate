@@ -13,6 +13,21 @@ get_name <- function(x){
 }
 get_name <- Vectorize(get_name)
 
+remove_singletons <- function(mites){
+  
+  m <- mutate(mites, across(is.numeric, ceiling))
+  
+  keep <- m %>%
+    select(2:last_col()) %>%
+    pivot_longer(1:last_col()) %>%
+    group_by(name) %>%
+    summarize(count = sum(value)) %>%
+    filter(count > 1)
+  
+  mites <- select(mites, keep$name)
+  return(mites)
+}
+
 samples <- read_csv("datasets_primary/mite_samples.csv")
 mites <- read_csv("datasets_derived/sequencing/mite_sequences_annotated.csv")
 
@@ -47,7 +62,8 @@ mites <- mites %>%
   group_by(odonate_spp) %>%
   summarise(across(everything(), sum)) %>% #Sum s/t number indicates number of times an association is detected
   mutate_if(is.numeric, funs(./sum(.))) %>%
-  select_if(~ !any(is.nan(.))) # Previous op causes div 0 if there are no detections.
+  select_if(~ !any(is.nan(.))) %>% # Previous op causes div 0 if there are no detections.
+  remove_singletons()
 
 write_csv(mites, "datasets_derived/prob_network.csv")
 
