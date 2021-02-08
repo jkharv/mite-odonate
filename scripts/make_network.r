@@ -24,7 +24,7 @@ remove_singletons <- function(mites){
     summarize(count = sum(value)) %>%
     filter(count > 1)
   
-  mites <- select(mites, keep$name)
+  mites <- select(mites, odonate_spp | keep$name)
   return(mites)
 }
 
