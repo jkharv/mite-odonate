@@ -5,6 +5,7 @@ library(tidyverse)
 a2015 <- read_csv("datasets_primary/2015_data.csv", na = c("", "NA", "N/A", "n/a"))
 a2019 <- read_csv("datasets_primary/2019_data.csv", na = c("", "NA", "N/A", "n/a"))
 a2020 <- read_csv("datasets_primary/2020_data.csv", na = c("", "NA", "N/A", "n/a"))
+masses <- read_csv("datasets_primary/2019-2020-mass.csv", na = c("", "NA", "N/A", "n/a"))
 network <- read_csv("datasets_derived/bin_network.csv")
 mites <- read_csv("datasets_derived/mite_phylo_scale.csv")
 
@@ -13,7 +14,7 @@ a2015 <- a2015 %>%
   rename(Mite_Abundance = "Mite Load") %>%
   rename(mass = "Mass (g)") %>%
   filter(species != "Lestes_sp" & species != "Aeshna_sp") %>%
-  drop_na(species) %>%
+  drop_na(Species) %>%
   select(c(species, Mite_Abundance, mass))
 
 # Julie used old taxonomy without Gomphus split up. I'm using Gomphus in the analysis.
@@ -23,24 +24,33 @@ a2020 <-  a2020 %>%
             pattern = "Gomphurus|Hylogomphus|Phanogomphus|Stenogomphurus", 
             replacement = "Gomphus") %>%
   mutate(species = paste(Genus, Species, sep = "_")) %>%
-  drop_na(species) %>%
-  select(species)
+  drop_na(Species) %>%
+  select(species, Mite_Abundance)
 
 a2019 <-  a2019 %>%
   mutate_if(is.character, str_replace_all, 
             pattern = "Gomphurus|Hylogomphus|Phanogomphus|Stenogomphurus", 
             replacement = "Gomphus") %>%
   mutate(species = paste(Genus, Species, sep = "_")) %>%
-  drop_na(species) %>%
-  select(species)
-  
+  drop_na(Species) %>%
+  select(species, Mite_Abundance)
+
+masses <-  masses %>%
+  mutate_if(is.character, str_replace_all, 
+            pattern = "Gomphurus|Hylogomphus|Phanogomphus|Stenogomphurus", 
+            replacement = "Gomphus") %>%
+  mutate(species = paste(Genus, Species, sep = "_")) %>%
+  rename(mass = "Weight(g)") %>%
+  drop_na(Species, mass) %>%
+  select(species, mass)
+
 # Julie's data used a standard sampling protocol.
 abundances <- a2015 %>%
   group_by(species) %>%
   tally() %>%
   rename(abundance = n)
 
-all_data <- union_all(union_all(a2015, a2019), a2020)
+all_data <- union_all(union_all(a2015, a2019), union_all(a2020, masses))
 
 prevalences <- all_data %>%
   drop_na(Mite_Abundance) %>%
@@ -76,6 +86,8 @@ mite_points <- network %>%
   summarise_all(c(mean = mean, sd = sd)) %>%
   rename(species = odonate_spp)
 
-odonates <- full_join(prevalences, full_join(mite_points, masses, by = "species"), by = "species")
+odonates <- full_join(prevalences, 
+                      full_join(mite_points, 
+                      full_join(masses, abundances, by = "species"), by = "species"), by = "species")
 
 write_csv(odonates, "datasets_derived/odonate_summaries.csv")
