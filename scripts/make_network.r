@@ -2,6 +2,7 @@
 # Make a binary (or probabilistic) host-parasite network
 
 library(tidyverse)
+library(DESeq2)
 
 get_name <- function(x){
   n <- filter(samples, sample_code == substring(x, 2))
@@ -54,11 +55,16 @@ write_csv(controls, "datasets_derived/controls.csv")
 
 mites <- mites %>%
   select(matches("(X[[:digit:]]{4}_[[:digit:]]{1,2})")) %>% #Exclude the control samples
-  t() %>%
+  t()
+
+mites <- varianceStabilizingTransformation(as.matrix(mites) + 1, fitType = "local")
+
+mites <- mites %>%
   as.data.frame() %>%
+  rename_all( ~ paste0("V", .x)) %>% #DESeq2 leaves invalid col names idk.
   rownames_to_column("odonate_spp") %>%
   mutate(odonate_spp = get_name(odonate_spp)) %>% # Getting the spp for each sample code
-  mutate(across(is.numeric, Vectorize(function(x) if(x>=500){1}else{0}))) %>% #Threshold, reads -> presence
+  mutate(across(is.numeric, Vectorize(function(x) if(x > 0){1}else{0}))) %>% # filter pos detec. from vst
   group_by(odonate_spp) %>%
   summarise(across(everything(), sum)) %>% #Sum s/t number indicates number of times an association is detected
   mutate_if(is.numeric, funs(./sum(.))) %>%
