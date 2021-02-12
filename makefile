@@ -8,7 +8,7 @@ datasets_derived/sequencing/reference_db.fasta: datasets_primary/sequencing/arac
 	Rscript scripts/mite_reference_db.r
 	echo Creating reference database for mite sequences
 
-datasets_derived/sequencing/mite_sequences_annotated.csv: mite_sequences.csv scripts/assign_taxonomy.r | datasets_derived/sequencing/reference_db.fasta
+datasets_derived/sequencing/mite_sequences_annotated.csv: datasets_derived/sequencing/mite_sequences.csv scripts/assign_taxonomy.r | datasets_derived/sequencing/reference_db.fasta
 	Rscript scripts/assign_taxonomy
 	echo Assignning taxonomy to sequences
 
@@ -20,7 +20,7 @@ datasets_derived/mite_phylo_scale.csv: datasets_derived/bin_network.csv scripts/
 	Rscript scripts/indices.r
 	echo Calculating phylogenetic scale and specialization indices
 
-datasets_derived/odonate_summaries.csv: scripts/odonate_summaries.r datasets_primary/2015_data.csv datasets_primary/2019_data.csv datasets_primary/2020_data.csv
+datasets_derived/odonate_summaries.csv: scripts/odonate_summaries.r datasets_primary/2015_data.csv datasets_primary/2019_data.csv datasets_primary/2020_data.csv datasets_derived/bin_network.csv datasets_derived/mite_phylo_scale.csv
 	Rscript scripts/odonate_summaries.r
 	echo Calculating Odonate abundances and mite prevalences
 
