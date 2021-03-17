@@ -81,13 +81,22 @@ mite_points <- network %>%
   mutate(mite_scale = get_scale(mite)) %>%
   mutate(resource_range = get_rr(mite)) %>%
   mutate(num_host = get_hn(mite)) %>%
-  select(odonate_spp, mite_scale, resource_range, num_host) %>%
+  select(odonate_spp, mite_scale, resource_range, num_host)
+
+specialist <- mite_points %>%
+  mutate(specialist = ifelse(mite_scale <= 100, 1, 0)) %>%
+  mutate(generalist = ifelse(mite_scale > 100, 1, 0)) %>%
+  select(odonate_spp, specialist, generalist) %>%
+  group_by(odonate_spp) %>%
+  summarise_all(sum)  %>%
+  rename(species = odonate_spp)
+
+spp_avg <- mite_points %>%
   group_by(odonate_spp) %>%
   summarise_all(c(mean = mean, sd = sd)) %>%
   rename(species = odonate_spp)
 
-odonates <- full_join(prevalences, 
-                      full_join(mite_points, 
-                      full_join(masses, abundances, by = "species"), by = "species"), by = "species")
-
+odonates <- list(prevalences, masses, abundances, specialist, spp_avg) %>%
+            reduce(function(x, y) full_join(x, y, by = "species"))
+                     
 write_csv(odonates, "datasets_derived/odonate_summaries.csv")
