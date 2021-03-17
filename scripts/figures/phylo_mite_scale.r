@@ -41,6 +41,7 @@ scale_plot <- facet_plot(tree, panel = "Phylogenetic Scale", data = mite_points,
                          xlim_expand(c(25, 100), panel = "Phylogenetic Scale") + 
                          theme_tree2()
 print(scale_plot)
+ggsave("figures/main_plot.svg", scale_plot)
 
 rr_plot <- facet_plot(tree, panel = "Phylogenetic Scale", data = mite_points,
                       geom = geom_point, aes(x = resource_range)) +
