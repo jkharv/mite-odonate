@@ -6,28 +6,29 @@ library(tidyverse)
 library(mgcv)
 library(car)
 
-mites <- read_csv("datasets_derived/mite_summaries.csv")
+odonates <- read_csv("datasets_derived/odonate_summaries.csv")
 
-mites$species <- factor(mites$species)
+odonates$species <- factor(odonates$species)
+odonates <- drop_na(odonates, mite_scale_mean)
+odonates <- mutate(odonates, sr = specialist / generalist)
 
 phylo <- read.nexus("datasets_primary/phylogeny/FinalOdonatetree.tre")
 # Phylogeny is missing many species. I have mite data for four of the missing.
-keep <- intersect(phylo$tip.label, mites$species)
-mites <- filter(mites, species %in% keep)
+keep <- intersect(phylo$tip.label, odonates$species)
+odonates <- filter(odonates, species %in% keep)
 phylo <- keep.tip(phylo, keep)
-plot(phylo)
 
 pmatrix <- mrf_penalty(phylo)
-qqPlot(mites$mite_scale)
-hist(mites$mite_scale)
 
-m <- gam(sqrt(rank(mite_scale)) ~ s(species, bs = 'mrf', xt = list(penalty = pmatrix)) + s(prevalence) + log(mass), 
-         data = mites, method = "REML", family = gaussian)
-summary(m)
+spec_ratio <- cbind(odonates$specialist, odonates$generalist)
 
+phylo_model <- gam(spec_ratio ~ s(species, bs = 'mrf', xt = list(penalty = pmatrix), k = 10), 
+         data = odonates, method = "REML", family = binomial)
+summary(phylo_model)
 
-x<-ggplot(aes(x = mite_scale, y = prevalence), data = mites) +
-  geom_point() + 
-  scale_y_log10() + 
-  geom_smooth()
-print(x)
+r_model <- gam(phylo_model$residuals ~ log(mass), data = odonates, method = "REML", family = "gaussian")
+summary(r_model)
+
+mass_model <- gam(spec_ratio ~ log(mass), 
+         data = odonates, method = "REML", family = binomial)
+summary(mass_model)
