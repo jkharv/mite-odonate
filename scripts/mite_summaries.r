@@ -20,12 +20,16 @@ mite_points <- network %>%
   mutate(mite_scale = get_scale(mite)) %>%
   mutate(resource_range = get_rr(mite)) %>%
   mutate(num_host = get_hn(mite)) %>%
-  select(odonate_spp, mite_scale, resource_range, num_host) %>%
+  select(odonate_spp, mite, mite_scale, resource_range, num_host) %>%
   rename(species = odonate_spp)
 
 odonates <- select(odonates, species, prevalence, mass)
 
 mites <- inner_join(mite_points, odonates, by = "species")
 
-write_csv(mites, "datasets_derived/mite_summaries.csv")
+# mites <- mites %>%
+#   select(mite, mite_scale, resource_range, num_host) %>%
+#   group_by(mite) %>%
+#   summarize_all(mean)
 
+write_csv(mites, "datasets_derived/mite_summaries.csv")
