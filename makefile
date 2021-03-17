@@ -9,7 +9,7 @@ datasets_derived/sequencing/reference_db.fasta: datasets_primary/sequencing/arac
 	echo Creating reference database for mite sequences
 
 datasets_derived/sequencing/mite_sequences_annotated.csv: datasets_derived/sequencing/mite_sequences.csv scripts/assign_taxonomy.r | datasets_derived/sequencing/reference_db.fasta
-	Rscript scripts/assign_taxonomy
+	Rscript scripts/assign_taxonomy.r
 	echo Assignning taxonomy to sequences
 
 datasets_derived/bin_network.csv datasets_derived/prob_network.csv: datasets_derived/sequencing/mite_sequences_annotated.csv scripts/make_network.r
