@@ -23,8 +23,3 @@ datasets_derived/mite_phylo_scale.csv: datasets_derived/bin_network.csv scripts/
 datasets_derived/odonate_summaries.csv: scripts/odonate_summaries.r datasets_primary/2015_data.csv datasets_primary/2019_data.csv datasets_primary/2020_data.csv datasets_derived/bin_network.csv datasets_derived/mite_phylo_scale.csv
 	Rscript scripts/odonate_summaries.r
 	echo Calculating Odonate abundances and mite prevalences
-
-figures/phylo_plot.svg: datasets_derived/mite_phylo_scale.csv scripts/figures/phylo_mite_scale.r
-	Rscript scripts/figures/phylo_mite_scale.r
-
-figures: figures/phylo_plot.svg
