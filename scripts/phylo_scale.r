@@ -1,15 +1,5 @@
 # Author: Jake Harvey jakekharvey@gmail.com
 #
-# TODO. Filtering out odonates not in my phylogeny leveas some mites with zeroes
-# all the way through, creating NaNs as scales.
-#
-# TODO. GAM can't fit on the using the full phylogeny because there isn't enough
-# species smapled to estimate all the leaves and internal nodes. Can only estimate
-# as many nodes as I have data points. Must order tips based on distance from sampled
-# tips and discard as many as needed to allow the GAM to fit.
-#
-# TODO. Separate the analysis from the algorithms, put them in their own file.
-#
 # TODO. More permanent solution to MRFtools compatibility issue with Gratia.
 #
 
