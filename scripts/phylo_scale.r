@@ -24,7 +24,8 @@ combinational_phylo_scale <- function(network, phylo, mite){
   
   parasitized_only <- filter(network , !!sym(mite) > 0)
   
-  combinations <- cross2(parasitized_only$odonate_spp, parasitized_only$odonate_spp)
+  combinations <- cross2(parasitized_only$odonate_spp, 
+                         parasitized_only$odonate_spp)
   node_list <- data.frame(node = numeric(), coef = numeric())
   # For some reason idk why I get different results from getMRCA than fram mrca
   mrcas <- mrca(phylo)
@@ -33,8 +34,10 @@ combinational_phylo_scale <- function(network, phylo, mite){
     
     pair <- unlist(pair)
     mrca <- mrcas[pair[1], pair[2]]
-    coef <- parasitized_only[[which(parasitized_only$odonate_spp == pair[1]), mite]] +
-            parasitized_only[[which(parasitized_only$odonate_spp == pair[2]), mite]]
+    coef <- parasitized_only[[which(parasitized_only$odonate_spp == pair[1]), 
+                              mite]] +
+            parasitized_only[[which(parasitized_only$odonate_spp == pair[2]), 
+                              mite]]
     node_list <- add_to_df(node_list, mrca, coef)
   }
   
@@ -62,25 +65,3 @@ add_to_df <- function(df, node, coef){
   }
   return(df)
 }
-
-#----------------- MRF GAM METHOD --------------------------
-
-# Phylo trimmed to only the species I've got in the dataset.
-#trimmed_phylo <- keep.tip(phylo, bin_network$odonate_spp)
-#plot(trimmed_phylo)
-
-#pmatrix <- mrf_penalty(trimmed_phylo)
-
-#get_edf <- function(){
-# interaction_presence ~ s(odonate_sp, bs= phylo_pen) )
-#bin_network$odonate_spp <- factor(bin_network$odonate_spp, levels = rownames(trimmed_phylo))
-#levels(bin_network$odonate_spp)
-#dim(pmatrix)
-#rownames(pmatrix)
-#x <- gam(V38 ~ s(odonate_spp, bs = 'mrf', xt = list(penalty = pmatrix), k = 3), 
- #        data = bin_network, 
- #        method = "REML",
- #        drop.unused.levels = FALSE,
- #        family = binomial)
-#summary(x)$edf
-#}
