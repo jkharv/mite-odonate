@@ -1,10 +1,11 @@
 ---
-title: "Thesis"
+title: "Phylogenetic scale of specialization in the order Odonata"
 author: "Jacob Harvey"
 date: "08/03/2021"
 output:
-  html_document: default
+  pdf_document: default
   word_document: default
+  html_document: default
 bibliography: bibliography.json
 ---
 
@@ -14,47 +15,163 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 1	Introduction
 
-Specialization, the process by which organisms limit themselves to a subset of the available resources, is an important unifying concept in ecology [@poisot2011]. Every organism needs some sort of resource to survive and as such can be placed somewhere on the spectrum of specialization. Specialization has many important ecological consequences, such as enabling the coexistence of species through resource partitioning or maintaining biodiversity. Such as via the Janzen-Connell hypothesis whereby accumulation of specialist predators in the area around their resource depresses recruitment locally and allows other species to be more competitive. Thereby maintaining a more heterogenous spatial distribution of species. Originated to explain tropical tree diversity, it is widely applicable elsewhere. [ADD ANOTHER EXAMPLE]
+Specialization, the process by which organisms limit themselves to a subset of 
+the available resources, is an important unifying concept in ecology 
+[@poisot2011]. Every organism needs some sort of resource to survive and as such
+can be placed somewhere on the spectrum of specialization. Specialization has
+many important ecological consequences, such as enabling the coexistence of 
+species through resource partitioning or maintaining biodiversity. Such as via
+the Janzen-Connell hypothesis whereby accumulation of specialist predators in
+the area around their resource depresses recruitment locally and allows other 
+species to be more competitive. Thereby maintaining a more heterogeneous spatial
+distribution of species. Originated to explain tropical tree diversity, it is
+widely applicable elsewhere. [ADD ANOTHER EXAMPLE]
 
-Many organisms, and especially parasites, will exhibit strong phylogenetic signal in the resources they use. They utilize a set of related hosts, and will be less successful on hosts the more distant the relation to their primary host [@perlman2003; @poulin2011]. Specialization can simply be expressed as the number of hosts a parasite exploits, but the phylogenetic relationships between the hosts adds another dimension. A parasite exploiting two closely related hosts is more specialist than a parasite exploiting two distantly related hosts. To address this, indices of the phylogenetic diversity of the hosts are widely used to express the degree of specialization of their shared parasite [@poulin2011].
+Many organisms, and especially parasites, will exhibit strong phylogenetic 
+signal in the resources they use. They utilize a set of related hosts, and will
+be less successful on hosts the more distant the relation to their primary host
+[@perlman2003; @poulin2011]. Specialization can simply be expressed as the 
+number of hosts a parasite exploits, but the phylogenetic relationships between
+the hosts adds another dimension. A parasite exploiting two closely related
+hosts is more specialist than a parasite exploiting two distantly related hosts.
+To address this, indices of the phylogenetic diversity of the hosts are widely
+used to express the degree of specialization of their shared parasite
+[@poulin2011].
 
-Phylogenetic scale also becomes an important consideration when considering parasites whose host choice is phylogenetically determined (see @graham2018). In this use case, it is conceptually very similar to phylogenetic diversity indices. It expresses how specific or how broad of a collection of related hosts used by a parasite are. Phylogenetic scale can be a much more intuitive way of expressing this by taking on units of millions of years to represent the age of a node. These units should also make it simple to compare between studies. [EXPAND ON PHYLO SCALE]
+Phylogenetic scale also becomes an important consideration when considering 
+parasites whose host choice is phylogenetically determined (see @graham2018). 
+In this use case, it is conceptually very similar to phylogenetic diversity 
+indices. It expresses how specific or how broad of a collection of related hosts 
+used by a parasite are. Phylogenetic scale can be a much more intuitive way of 
+expressing this by taking on units of millions of years to represent the age of 
+a node. These units should also make it simple to compare between studies. 
+[EXPAND ON PHYLO SCALE]
 
-Given the relative simplicity of studying host-parasite relationships, there has been much work in this area, though mostly on vertebrate hosts. Much less work has been done on insect hosts [@mlynarek2015]. Water-mite (Hydrachnidia) parasitism on Odonates provides an ideal model system for the study of parasitism on insect hosts because of Odonates’ widespread range, high abundance, and relative ease of identification. While there has been research on the intensity of water-mite parasitism, much less is known about how specialized these mites are and what lineages of Odonates host the most specialized parasites. This might be due to the difficulty in identifying water-mites to the species level given their lack of morphological variation. Here, we use genetic methods to identify mites both simply as sequence variants and as OTUs.
+Given the relative simplicity of studying host-parasite relationships, there has
+been much work in this area, though mostly on vertebrate hosts. Much less work 
+has been done on insect hosts [@mlynarek2015]. Water-mite (Hydrachnidia) 
+parasitism on Odonates provides an ideal model system for the study of 
+parasitism on insect hosts because of Odonates’ widespread range, high 
+abundance, and relative ease of identification. While there has been research 
+on the intensity of water-mite parasitism, much less is known about how 
+specialized these mites are and what lineages of Odonates host the most 
+specialized parasites. This might be due to the difficulty in identifying 
+water-mites to the species level given their lack of morphological variation. 
+Here, we use genetic methods to identify mites both simply as sequence variants
+and as OTUs.
 
-Odonates have single terrestrial adult stage, early instars, called nymphs are all aquatic. Newly hatched Arenurrus water mite larvae find final instar nymphs in the water column and attach themselves. When the nymph is ready to moult, it climbs from the water, normally onto some vegetation, its exoskeleton splits down the back and the teneral adult emerges. Before the cuticle has had the chance to harden, the mites transfer from the exuviae onto the teneral Odonate. It then pierces the cuticle with its mouthparts and begins to engorge itself. The engorgment process may take a few days to complete, upon which they detach themselves while the Odonate is over water where they metamorphose into an adult, predatory water mite. Another genus of water mite, Limnochares, is also known to parasitize Odonates, but it uses a different strategy. The larval mite crawls onto some vegetation on which it waits for an Odonate to perch. When an Odonate comes near enough it climbs on and pierces its cuticle and begins to engorge itself.
+Odonates have single terrestrial adult stage, early instars, called nymphs are
+all aquatic. Newly hatched Arenurrus water mite larvae find final instar nymphs
+in the water column and attach themselves. When the nymph is ready to moult, it
+climbs from the water, normally onto some vegetation, its exoskeleton splits
+down the back and the teneral adult emerges. Before the cuticle has had the
+chance to harden, the mites transfer from the exuviae onto the teneral Odonate.
+It then pierces the cuticle with its mouthparts and begins to engorge itself.
+The engorgment process may take a few days to complete, upon which they detach
+themselves while the Odonate is over water where they metamorphose into an 
+adult, predatory water mite. Another genus of water mite, Limnochares, is also
+known to parasitize Odonates, but it uses a different strategy. The larval mite
+crawls onto some vegetation on which it waits for an Odonate to perch. When an
+Odonate comes near enough it climbs on and pierces its cuticle and begins to
+engorge itself.
 
-The order Odonata consists of two major suborders: Anisoptera and Zygoptera (dragonflies and damselflies) which can be contrasted in a number of ways. Anisopterans are generally larger than zygopterans and are generally present in lower local abundance. The contrast between the two suborders would lead us to expect a difference in selective pressures for parasites in each group. In birds it has been shown that in colonial nesting species, a high degree of spatial aggregation leads to more specialist fleas [@tripet2002]. If this pattern also holds true for Odonates, we expect Zygoptera to host more specialist mites than Anisoptera. In the language of phylogenetic scale, mites would specialize closer to the tips of the phylogeny. The work of @mylnarek2015 showed that mite OTUs which parasitized zygopterans strayed only rarely outside of a host’s genus. We should thus expect to find mites on zygopterans specialized at a scale of less than approximately 50 Ma. Since we are expecting more specialist mites on Zygoptera, Anisoptera should host many mites specialization at scales of greater than 50 Ma.
+The order Odonata consists of two major suborders: Anisoptera and Zygoptera 
+(dragonflies and damselflies) which can be contrasted in a number of ways.
+Anisopterans are generally larger than zygopterans and are generally present in
+lower local abundance. The contrast between the two suborders would lead us to
+expect a difference in selective pressures for parasites in each group. In birds
+it has been shown that in colonial nesting species, a high degree of spatial 
+aggregation leads to more specialist fleas [@tripet2002]. If this pattern also 
+holds true for Odonates, we expect Zygoptera to host more specialist mites than
+Anisoptera. In the language of phylogenetic scale, mites would specialize closer
+to the tips of the phylogeny. The work of @mylnarek2015 showed that mite OTUs
+which parasitized zygopterans strayed only rarely outside of a host’s genus. We
+should thus expect to find mites on zygopterans specialized at a scale of less
+than approximately 50 Ma. Since we are expecting more specialist mites on 
+Zygoptera, Anisoptera should host many mites specialization at scales of greater
+than 50 Ma.
 
 # 2	Methods
 
 ## 2.1	Odonate sampling & Mite preparation
 
-Specimens were collected from 83 sites (map 2.1) across Québec in the summers of 2015, 2019, and 2020. Of these sites, specimens with mites were found at 29. Those collected 2019 and 2020 had immune response tests conducted on them and morphological measurements made. Specimens from all years were weighed, inspected under microscope for mites, and had their mites counted. Field work on each year was conducted according to a different sampling protocol. As such we can infer nothing about community composition or abundances at the sampling sites.
+Specimens were collected from 83 sites (map 2.1) across Québec in the summers of
+2015, 2019, and 2020. Of these sites, specimens with mites were found at 29. 
+Those collected 2019 and 2020 had immune response tests conducted on them and
+morphological measurements made. Specimens from all years were weighed, 
+inspected under microscope for mites, and had their mites counted. Field work on
+each year was conducted according to a different sampling protocol. As such we 
+can infer nothing about community composition or abundances at the sampling 
+sites.
 
-Mites were removed under a dissecting scope and pooled into tubes by species and by site. Such that at each site, one sample per Odonate species which had parasites was prepared. Specimens from 2015 were pooled by species only; all mites found on a particular species at any site were pooled into the same sample.
+Mites were removed under a dissecting scope and pooled into tubes by species and
+by site. Such that at each site, one sample per Odonate species which had 
+parasites was prepared. Specimens from 2015 were pooled by species only; all 
+mites found on a particular species at any site were pooled into the same 
+sample.
 
-Since most Odonate specimens were not collected with DNA preservation in mind, we did not preserve all specimens in the same way. Those from 2015 where immersed in 95% ethanol for 24 hours and were then removed and allowed to dry; they remained in envelopes for the next 5 years, until we removed their mites. Those from 2019 were treated with acetone and then stored in envelopes for a year, before we removed their mites. Those from 2020 were treated the same way as those from 2019 but only stored for a few weeks. One sample from 2020 was stored in 95% ethanol until its mites were removed.
+Since most Odonate specimens were not collected with DNA preservation in mind,
+we did not preserve all specimens in the same way. Those from 2015 where 
+immersed in 95% ethanol for 24 hours and were then removed and allowed to dry;
+they remained in envelopes for the next 5 years, until we removed their mites.
+Those from 2019 were treated with acetone and then stored in envelopes for a
+year, before we removed their mites. Those from 2020 were treated the same way 
+as those from 2019 but only stored for a few weeks. One sample from 2020 was 
+stored in 95% ethanol until its mites were removed.
 
 ![Map2.1](Sampling Sites.svg)
 Map 2.1 Odonate sampling sites across the Québec. (OpenStreetMaps)
 
 ## 2.2	DNA Extraction and sequencing
 
-DNA was extracted using Qiagen’s DNEasy Blood and Tissue Kit. The extractions were performed according to the manual except that each sample had 2 sterile metal beads added. The samples were removed from their heat bath and vortexed for 5 minutes at a time for a total of 30 minutes over a 3 hour long digestion. Samples 1-5 from 2015 were a trial run, these were put in a bead mill for 2 minutes rather than using the vortexer. One batch was also vortexed for 30 minutes before being put into the heat bath. In the heat bath it was only vortexed occasionally and for less time than other batches to agitate the material as specified in the manual. Five negative control samples were also used which showed minimal contamination. A 300 bp segment of Cytochrome Oxidase I was amplified using PCR and sequenced using an Illumina high-throughput sequencer. A negative PCR control also showed very minimal contamination. 
+DNA was extracted using Qiagen’s DNEasy Blood and Tissue Kit. The extractions 
+were performed according to the manual except that each sample had 2 sterile 
+metal beads added. The samples were removed from their heat bath and vortexed 
+for 5 minutes at a time for a total of 30 minutes over a 3 hour long digestion. 
+Samples 1-5 from 2015 were a trial run, these were put in a bead mill for 2 
+minutes rather than using the vortexer. One batch was also vortexed for 30 
+minutes before being put into the heat bath. In the heat bath it was only 
+vortexed occasionally and for less time than other batches to agitate the 
+material as specified in the manual. Five negative control samples were also 
+used which showed minimal contamination. A 300 bp segment of Cytochrome Oxidase 
+I was amplified using PCR and sequenced using an Illumina high-throughput 
+sequencer. A negative PCR control also showed very minimal contamination. 
 
 ## 2.3	Sequence preparation and network construction
 
-The raw sequence data was prepared and chimeric sequences removed using DADA2 [@callahan2016]. DADA2 was also used to assign taxonomy to all the sequences using a reference database assembled from all Odonate and Arachnid sequences in the BOLD database as of September 2020 [@Ratnasingham2007]. Any non-mite sequences were filtered out on the basis of these taxonomy assignments.
+The raw sequence data was prepared and chimeric sequences removed using DADA2 
+[@callahan2016]. DADA2 was also used to assign taxonomy to all the sequences 
+using a reference database assembled from all Odonate and Arachnid sequences in
+the BOLD database as of September 2020 [@Ratnasingham2007]. Any non-mite 
+sequences were filtered out on the basis of these taxonomy assignments.
 
 [THERE IS A PROPER WAY OF DOING THIS WHICH I HAVEN’T DONE YET, THIS WILL CHANGE]
-To account for small amounts of cross-contamination we considered 500 reads or more of an ASV to be a detection of an interaction. A probabilistic network was also constructed by dividing the number of interactions detected between a mite and an Odonate with the total number of hosts recorded for that mite ASV. 
+To account for small amounts of cross-contamination we considered 500 reads or 
+more of an ASV to be a detection of an interaction. A probabilistic network was 
+also constructed by dividing the number of interactions detected between a mite 
+and an Odonate with the total number of hosts recorded for that mite ASV. 
 
 ## 2.4	Determination of phylogenetic scale
 
-The phylogenetic scale of each mite’s interactions on the Odonate phylogeny were calculated as a weighted sum of node ages in the phylogeny. Each node was weighted by how often it occurs as the most recent common ancestor of pairs of host species. In the case of probabilistic networks, the weight of each interaction is also taken into account in the weighting.
+The phylogenetic scale of each mite’s interactions on the Odonate phylogeny were
+calculated as a weighted sum of node ages in the phylogeny. Each node was 
+weighted by how often it occurs as the most recent common ancestor of pairs of 
+host species. In the case of probabilistic networks, the weight of each 
+interaction is also taken into account in the weighting.
 
-For a particular mite, the cartesian product is taken of the set of host species with itself. The most recent common ancestor is found for each of these pairs of species (including self-pairs) and the coefficients describing the interaction: zero or one for a binary network, or a range from 0 to 1 for a probabilistic network is added to that node. Each node of the phylogeny now has a number proportional to how often its descendant nodes are recorded hosts for a specific parasite. These are rescaled to a number between 0 and 1 by dividing each but the sum across the whole phylogeny. These numbers are used to weight the age of each node, calculated as the difference between the depth of a node and the maximum depth of any node in the phylogeny. The sum of these weighted ages is the phylogenetic scale of parasitism in the host’s phylogeny. This method requires an ultrametric phylogeny. The values take on the units of the phylogeny, whether it be millions of years or some measure of genetic distance. 
+For a particular mite, the cartesian product is taken of the set of host species
+with itself. The most recent common ancestor is found for each of these pairs of
+species (including self-pairs) and the coefficients describing the interaction:
+zero or one for a binary network, or a range from 0 to 1 for a probabilistic 
+network is added to that node. Each node of the phylogeny now has a number 
+proportional to how often its descendant nodes are recorded hosts for a specific
+parasite. These are rescaled to a number between 0 and 1 by dividing each but 
+the sum across the whole phylogeny. These numbers are used to weight the age of 
+each node, calculated as the difference between the depth of a node and the 
+maximum depth of any node in the phylogeny. The sum of these weighted ages is 
+the phylogenetic scale of parasitism in the host’s phylogeny. This method 
+requires an ultrametric phylogeny. The values take on the units of the 
+phylogeny, whether it be millions of years or some measure of genetic distance. 
 
 [WILL ADD A NICE EQUATION LATER]
 
@@ -62,20 +179,35 @@ For a particular mite, the cartesian product is taken of the set of host species
 
 # 3	Results
 
-The combination phylogenetic scale analysis revealed that there are both specialist and generalist mites. The generalists can be found on both Anisoptera and Zygoptera, but specialists are only found on Zygoptera, producing a clear triangular pattern evident in figure 3.1. Figure 3.2 shows that no such pattern appears when examining a non-phylogenetic measure of specialization: number of hosts.
+The combination phylogenetic scale analysis revealed that there are both 
+specialist and generalist mites. The generalists can be found on both Anisoptera
+and Zygoptera, but specialists are only found on Zygoptera, producing a clear 
+triangular pattern evident in figure 3.1. Figure 3.2 shows that no such pattern 
+appears when examining a non-phylogenetic measure of specialization: number of 
+hosts.
 
-The specialist mites on Zygoptera specialize at approximately, or a little above, the scale of the genera in Zygoptera. This is roughly in line with the work of @mlynarek2015 on Zygoptera where most of the mite OTUs they found strayed very little out of a single genus of hosts. 
+The specialist mites on Zygoptera specialize at approximately, or a little 
+above, the scale of the genera in Zygoptera. This is roughly in line with the 
+work of @mlynarek2015 on Zygoptera where most of the mite OTUs they found 
+strayed very little out of a single genus of hosts. 
 
-Figure 3.3 shows that there is not obvious relationship between the number of hosts a mite has and its phylogenetic scale. This suggests that this method is fairly robust to some degree of under sampling. Only significant under sampling should lead to a bias for lower phylogenetic scale estimates. 
+Figure 3.3 shows that there is not obvious relationship between the number of 
+hosts a mite has and its phylogenetic scale. This suggests that this method is 
+fairly robust to some degree of under sampling. Only significant under sampling 
+should lead to a bias for lower phylogenetic scale estimates. 
 
 ![Fig3.1](../figures/main_plot.svg)
-Figure 3.1 Phylogenetic scale of mites infesting Odonates. Each point represents an interaction between a mite and its host. As such, multiple points represent the same mite. Units are in millions of years. (Tree’s scale should be flipped.
+Figure 3.1 Phylogenetic scale of mites infesting odonates. Each point represents
+an interaction between a mite and its host. As such, multiple points represent 
+the same mite. Units are in millions of years. (Tree’s scale should be flipped.
  
 
 
 # 4	Discussion 
 
-[[@moller2005]. Saw a triangular pattern like us, but we saw the mirror of what I would’ve predicted based on this why? Their high immune response birds were also colonial]
+[[@moller2005]. Saw a triangular pattern like us, but we saw the mirror of what 
+I would’ve predicted based on this why? Their high immune response birds were 
+also colonial]
 
 # 5 References
 
