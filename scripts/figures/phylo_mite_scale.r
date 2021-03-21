@@ -15,10 +15,11 @@ phylo <- keep.tip(phylo, keep)
 
 tree <- ggtree(phylo) +
   geom_tiplab() + 
-  xlim_tree(450)
+  xlim_tree(600) +
+  geom_hline(1)
 
 scale_plot <- facet_plot(tree, panel = "Phylogenetic Scale", data = mites,
                          geom = geom_point, aes(x = mite_scale)) +
                          xlim_expand(c(25, 100), panel = "Phylogenetic Scale") + 
                          theme_tree2()
-print(scale_plot)
+ggsave("figures/main_plot.svg", scale_plot)
