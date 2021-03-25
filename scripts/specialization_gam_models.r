@@ -29,3 +29,9 @@ summary(phylo_model)
 mass_model <- gam(spec_ratio ~ log(mass), 
          data = odonates, method = "REML", family = binomial)
 summary(mass_model)
+
+odonates <- drop_na(odonates, abundance)
+spec_ratio <- cbind(odonates$specialist, odonates$generalist)
+abun_model <- gam(spec_ratio ~ abundance, 
+                  data = odonates, method = "REML", family = binomial)
+summary(abun_model)
