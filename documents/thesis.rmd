@@ -1,5 +1,5 @@
 ---
-title: "Phylogenetic scale of specialization in the order Odonata"
+title: "Phylogenetic scale of water mite specialization in the order Odonata"
 author: "Jacob Harvey"
 date: "08/03/2021"
 output:
@@ -93,7 +93,7 @@ it has been shown that in colonial nesting species, a high degree of spatial
 aggregation leads to more specialist fleas [@tripet2002]. If this pattern also 
 holds true for Odonates, we expect Zygoptera to host more specialist mites than
 Anisoptera. In the language of phylogenetic scale, mites would specialize closer
-to the tips of the phylogeny. The work of @mylnarek2015 showed that mite OTUs
+to the tips of the phylogeny. The work of @mlynarek2015 showed that mite OTUs
 which parasitized zygopterans strayed only rarely outside of a host’s genus. We
 should thus expect to find mites on zygopterans specialized at a scale of less
 than approximately 50 Ma. Since we are expecting more specialist mites on 
@@ -151,7 +151,7 @@ sequencer. A negative PCR control also showed very minimal contamination.
 The raw sequence data was prepared and chimeric sequences removed using DADA2 
 [@callahan2016]. DADA2 was also used to assign taxonomy to all the sequences 
 using a reference database assembled from all Odonate and Arachnid sequences in
-the BOLD database as of September 2020 [@Ratnasingham2007]. Any non-mite 
+the BOLD database as of September 2020 [@ratnasingham2007]. Any non-mite 
 sequences were filtered out on the basis of these taxonomy assignments.
 
 Rarefying read count data has been shown to throw away more data than necessary
@@ -203,31 +203,74 @@ $$
 where $A_{ij}$ is the adjacency matrix containing interaction weights between
 host and parasite. 
 
+## 2.5 Statistical analyses
+
+To show that different odonate lineages differ in the balance of specialist and
+generalist parasites that they host, we classified each mite as either a
+specialist or a generalist. Those with phylogenetic scales of greater than 100
+Ma are generalist and those less than 100 Ma are specialist. In the odonate 
+phylogeny this roughly corresponds to a division at approximately the family
+level. This value was chosen because there is a natural gap in the distribution
+of phylogenetic scales at around that value imposed by long branches in the
+phylogeny.
+
+We use Generalized Additive Models (GAMs) from the `mgcv` package [@wood2017]
+to do phylogenetic regression. The phylogeny was represented using the Markov
+Random Field (MRF) basis provided in the package. A MRF is a graphical model
+representing the relationships between many random variables. The indented use 
+they had when they were implemented in the package was for dealing with 
+aggregated spatial data, such as census divisions, were neighbouring polygons
+are assumed to be more similar to each other than non-adjacent polygons. This
+also applies to phylogenies, were nodes which share and edge are assumed to be
+more similar to nodes which are many edges distant from one another. This
+relationship between the nodes is represented as a penalty matrix, penalizing
+nodes toward or away from each other based on edge lengths in the phylogeny.
+
+As a response variable we used the number of specialists and the number of
+generalists on a particular odonate species with a binomial error structure.
+As predictors, we used the aforementioned phylogenetic term as well as the log
+average mass of the odonate host.
+
 # 3	Results
 
-The combination phylogenetic scale analysis revealed that there are both 
-specialist and generalist mites. The generalists can be found on both Anisoptera
-and Zygoptera, but specialists are only found on Zygoptera, producing a clear 
-triangular pattern evident in figure 3.1. Figure 3.2 shows that no such pattern 
-appears when examining a non-phylogenetic measure of specialization: number of 
-hosts.
+The phylogenetic scale analysis revealed that there are both specialist and 
+generalist mites. The generalists can be found on both Anisoptera and Zygoptera, 
+but specialists are only found on Zygoptera, producing a clear triangular 
+pattern evident in figure 3.1. Figure 3.2 shows that no such pattern appears 
+when examining a non-phylogenetic measure of specialization: number of hosts.
+
+```{r}
+source("scripts/specialization_gam_models.r")
+
+ps <- as.data.frame(summary(phylo_model)$s.table) 
+ms <- as.data.frame(summary(mass_model)$p.table) 
+
+```
+
+|                   |Effective df|?? df        |Chi-squared  |p-value         |
+|-------------------|------------|-------------|-------------|----------------|
+|Species            |`r ps$edf`  |`r ps$Ref.df`|`r ps$Chi.sq`|$`r ps$"p-value"`$|
+
+
+|          |Estimate          |Standard Error        |z-value            |p-value             |
+|----------|------------------|----------------------|-------------------|--------------------|
+|Intercept |`r ms$Estimate[1]`|`r ms$"Std. Error"[1]`|`r ms$"z value"[1]`|$`r ms$"Pr(>|z|)"[1]`$|
+|log(mass) |`r ms$Estimate[2]`|`r ms$"Std. Error"[2]`|`r ms$"z value"[2]`|$`r ms$"Pr(>|z|)"[2]`$|
 
 The specialist mites on Zygoptera specialize at approximately, or a little 
 above, the scale of the genera in Zygoptera. This is roughly in line with the 
 work of @mlynarek2015 on Zygoptera where most of the mite OTUs they found 
 strayed very little out of a single genus of hosts. 
 
-Figure 3.3 shows that there is not obvious relationship between the number of 
-hosts a mite has and its phylogenetic scale. This suggests that this method is 
-fairly robust to some degree of under sampling. Only significant under sampling 
-should lead to a bias for lower phylogenetic scale estimates. 
-
-![Figure 3.1](../figures/main_plot.svg)
+![Figure 3.1](../figures/pscale_phylo_plot.svg)
 Figure 3.1 Phylogenetic scale of mites infesting odonates. Each point represents
 an interaction between a mite and its host. As such, multiple points represent 
 the same mite. Units are in millions of years. (Tree’s scale should be flipped.)
- 
 
+![Figure 3.2](../figures/nhost_phylo_plot.svg)
+Figure 3.2 Number of hosts a parasite has against the host phylogeny. Each point
+represents an interaction between an odonate and mite, as such, multiple points
+refer to the same mite.
 
 # 4	Discussion 
 
