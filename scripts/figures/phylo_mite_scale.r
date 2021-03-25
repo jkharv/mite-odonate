@@ -15,11 +15,16 @@ phylo <- keep.tip(phylo, keep)
 
 tree <- ggtree(phylo) +
   geom_tiplab() + 
-  xlim_tree(600) +
-  geom_hline(1)
+  xlim_tree(500) +
+  theme_tree2()
+print(tree)
 
 scale_plot <- facet_plot(tree, panel = "Phylogenetic Scale", data = mites,
-                         geom = geom_point, aes(x = mite_scale)) +
-                         xlim_expand(c(25, 100), panel = "Phylogenetic Scale") + 
-                         theme_tree2()
-ggsave("figures/main_plot.svg", scale_plot)
+                         geom = geom_jitter, aes(x = mite_scale), width = 0) +
+                         xlim_expand(c(25, 100), panel = "Phylogenetic Scale")
+ggsave("figures/pscale_phylo_plot.svg", scale_plot)
+
+nhost_plot <- facet_plot(tree, panel = "Number of Hosts", data = mites,
+                         geom = geom_jitter, aes(x = num_host), 
+                         width = 0)
+ggsave("figures/nhost_phylo_plot.svg", nhost_plot)
