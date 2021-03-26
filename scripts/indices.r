@@ -25,19 +25,6 @@ partial_scale <- Vectorize(function(m){combinational_phylo_scale(bin_network, ph
 mites <- tibble(mite = colnames(bin_network)[-1]) %>%
   mutate(combo_phylo_scale = partial_scale(mite))
 
-#~~~~~~~~~~~~~~~~~~Number of hosts~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-num_hosts <- function(bin_network, mite){
-  
-  mite <- pull(bin_network, mite)
-  n <- sum(mite)
-}
-
-partial_num_hosts <- Vectorize(function(m){num_hosts(bin_network, m)})
-
-mites <- mites %>%
-  mutate(num_host = partial_num_hosts(mite))
-
 #~~~~~~~~~~~~~~~~~~Resource Range~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Number of links normalized by number of possible links.
@@ -55,32 +42,24 @@ partial_rr <- Vectorize(function(m){resource_range(bin_network, m)})
 mites <- mites %>%
   mutate(resource_range = partial_rr(mite))
 
-write_csv(mites, "datasets_derived/mite_phylo_scale.csv")
-
 #~~~~~~~~~~~~~~~~~~phylo Specialization index~~~~~~~~~~~~~~~~~
-
-
-x<-tibble(sample = rep("A", 31), mite = bin_network$V1, odonate = bin_network$odonate_spp)
 
 x <- bin_network %>%
   pivot_longer(2:last_col()) %>%
   rename(mite = name) %>%
   arrange(mite) %>%
-  relocate(mite, value, odonate_spp)
+  relocate(mite, value, odonate_spp) %>%
+  sample2matrix()
 
-# Ok this is literally *exact* code from picante sample2matrix which would not run
-# and gave some inscrutable error. Somehow it runs perfectly not in a function. Fuck R.
-colnames(x) <- c("plot","abund","id")
-y <- tapply(x$abund, list(x$plot, x$id), sum)
-y[is.na(y)] <- 0
-x<-as.data.frame(y)
+simpson <- as.data.frame(raoD(x, phylo)$Dkk) %>%
+  rownames_to_column() %>%
+  rename(simpson = "raoD(x, phylo)$Dkk", mite = rowname)
 
-div <- raoD(x, phylo)
+faiths <- pd(x, phylo) %>%
+  rownames_to_column() %>%
+  rename(faiths = "PD", mite = rowname, num_host= SR)
 
-# getMRCA(phylo, c("Leucorrhinia_hudsonica", "Leucorrhinia_hudsonica"))
-# node_depths <- node.depth.edgelength(phylo)
-# node_depths <- max(node_depths) - node_depths 
-# node_depths[370]
-# c<-mrca(phylo)
-# pair <-  c("Leucorrhinia_hudsonica", "Leucorrhinia_hudsonica")
-# c[pair[1], pair[2]]
+div <- full_join(faiths, simpson, by = "mite")
+mites <- full_join(mites, div, by = "mite")
+
+write_csv(mites, "datasets_derived/mite_phylo_scale.csv")
