@@ -31,13 +31,33 @@ phylo <- keep.tip(phylo, keep)
 
 pmatrix <- mrf_penalty(phylo)
 
-# Mass is highly phylogentically conserved. ~ 80% deviance explained. 
-phylo_model <- gam(mass ~ s(species, bs = 'mrf', xt = list(penalty = pmatrix), k = 65), 
-                   data = masses, method = "REML", family = gaussian)
+# Mass is highly phylogenetically conserved. ~ 80% deviance explained. 
+mass_phylo_model <- gam(mass ~ s(species, bs = 'mrf', xt = 
+                                 list(penalty = pmatrix), k = 65), 
+                        data = masses, method = "REML", family = gaussian)
 summary(phylo_model)
-gam.check(phylo_model)
 
-mites <- read_csv("datasets_derived/mite_summaries.csv")
+mites <- read_csv("datasets_derived/mite_summaries.csv") %>%
+  select(mite, faiths, simpson, num_host, mite_scale) %>%
+  distinct()
 
-n_model <- gam(mite_scale ~ num_host, data = mites, method = "REML", family = gaussian)
+n_model <- gam(mite_scale ~ num_host, data = mites, method = "REML", 
+               family = gaussian)
 summary(n_model)
+
+pdps_model <- gam(mite_scale ~ s(faiths), data = mites, method = "REML",
+                  family = gaussian)
+summary(pdps_model)
+
+summary(lm(mite_scale ~ simpson, data = mites))
+
+
+pd_plot <- ggplot(mites, aes(x = faiths, y = mite_scale)) +
+  geom_point() +
+  scale_x_log10()
+print(pd_plot)
+
+
+
+
+
