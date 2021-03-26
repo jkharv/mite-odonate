@@ -3,10 +3,8 @@
 # TODO. More permanent solution to MRFtools compatibility issue with Gratia.
 #
 
-library(MRFtools)
 library(ape)
 library(tidyverse)
-library(mgcv)
 
 #---------------- Combinations Method ----------------------
 
