@@ -38,24 +38,28 @@ samples <- samples %>%
   mutate(odonate_spp = str_replace_all(odonate_spp, " ", "_"))
 
 controls <- mites %>%
-  select(contains("neg") | "phylum" | "class" | "order" | "family" | "genus" | "species")
+  select(contains(c("neg" , "phylum" , "class" , "order" , "family" , "genus" , "species")))
 
 write_csv(controls, "datasets_derived/controls.csv")
 
+# Get rid of junk cols, only need the asv counts
 mites <- mites %>%
-  select(matches("(X[[:digit:]]{4}_[[:digit:]]{1,2})")) #Exclude the control samples
+  select(!contains(c("sequence", "phylum" , "class" , "order" , "family" , "genus" , "species"))) %>%
+  select(2:last_col())
 
 mites <- varianceStabilizingTransformation(as.matrix(mites) + 1, fitType = "local")
-#rarecurve(mites, step = 100, label = FALSE)
-#mites <- rrarefy(mites, 2500)
+
+mites <- mites %>% 
+  as.data.frame() %>%
+  select(matches("(X[[:digit:]]{4}_[[:digit:]]{1,2})")) %>% #Exclude the control samples
+  t() %>%
+  as.matrix()
 
 mites <- mites %>%
-  t() %>%
   as.data.frame() %>%
-  #rename_all( ~ paste0("V", .x)) %>% #DESeq2 leaves invalid col names idk.
   rownames_to_column("odonate_spp") %>%
-  mutate(odonate_spp = get_name(odonate_spp)) %>% # Getting the spp for each sample code
   mutate(across(is.numeric, Vectorize(function(x) if(x > 0){1}else{0}))) %>% # filter pos detec. from vst
+  mutate(odonate_spp = get_name(odonate_spp)) %>% # Getting the spp for each sample code
   group_by(odonate_spp) %>%
   summarise(across(everything(), sum)) %>% #Sum s/t number indicates number of times an association is detected
   mutate_if(is.numeric, funs(./sum(.))) %>%
