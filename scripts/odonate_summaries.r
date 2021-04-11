@@ -89,7 +89,8 @@ specialist <- mite_points %>%
   select(odonate_spp, specialist, generalist) %>%
   group_by(odonate_spp) %>%
   summarise_all(sum)  %>%
-  rename(species = odonate_spp)
+  rename(species = odonate_spp) %>%
+  mutate(spec_ratio = specialist/generalist)
 
 spp_avg <- mite_points %>%
   group_by(odonate_spp) %>%
@@ -97,6 +98,6 @@ spp_avg <- mite_points %>%
   rename(species = odonate_spp)
 
 odonates <- list(prevalences, masses, abundances, specialist, spp_avg) %>%
-            reduce(function(x, y) full_join(x, y, by = "species"))
+            reduce(function(x, y) full_join(x, y, by = "species")) 
                      
 write_csv(odonates, "datasets_derived/odonate_summaries.csv")
