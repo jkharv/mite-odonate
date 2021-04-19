@@ -24,7 +24,7 @@ scale_plot <- facet_plot(tree, panel = "Phylogenetic Scale", data = mites,
                          xlim_expand(c(25, 100), panel = "Phylogenetic Scale")
 ggsave("figures/pscale_phylo_plot.svg", scale_plot)
 
-nhost_plot <- facet_plot(tree, panel = "Number of Hosts", data = mites,
-                         geom = geom_jitter, aes(x = num_host), 
-                         width = 0)
-ggsave("figures/nhost_phylo_plot.svg", nhost_plot)
+# nhost_plot <- facet_plot(tree, panel = "Number of Hosts", data = mites,
+#                          geom = geom_jitter, aes(x = num_host), 
+#                          width = 0)
+# ggsave("figures/nhost_phylo_plot.svg", nhost_plot)
