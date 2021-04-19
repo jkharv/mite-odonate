@@ -16,6 +16,13 @@ p{
   font-weight: lighter;
   font-size: smaller;
 }
+h1 {
+  font-size: larger;
+}
+h2{
+  font-size: medium;
+}
+
 ```
 
 ```{r setup, include=FALSE}
@@ -32,24 +39,37 @@ the available resources, is an important unifying concept in ecology
 can be placed somewhere on the spectrum of specialization. Specialization has 
 many important ecological consequences, such as enabling the coexistence of 
 species through resource partitioning [@poisot2011].
-[maintenance of biodiversity, chaotic patch dynamics, population control etc.]
+**[maintenance of biodiversity, chaotic patch dynamics, population control etc.]**
 
 Researchers have found many host traits which seem to determine the degree to
 which their parasites specialize. One such pattern which is thought to be robust
 is that host species with unstable population dynamics tend to have more
 generalist parasites as specialist parasites would be at a very high risk of
-extinction when the population dips too low [@bush1994]. Another pattern is that
-very speciose lineages should host more generalist parasites [@poulin2007a].
-This is because parasites may often be less successful on species the more
-distantly they are related to their current hosts [@perlman2003; @krasnov2004; 
-@poulin2011]. Many closely related species creates somewhat of a bridge, 
-allowing parasites to easily adapt to new host species and expand their host 
-range. Finally, host defences should have an effect on the degree to which their
+extinction when the population dips too low [@bush1994]. As such species which
+occur in low abundance should host less specialist parasites. We might also
+expect this relationship to hold with mass as well with smaller organisms
+hosting more specialist mites as small organisms tend to be more abundant than
+large organisms [@lewis2008]. 
+
+The argument has also been made for the opposite relationship, that large 
+organisms should host more specialist parasites. The argument is that they are
+longer lived and serve as more reliable resources [@poulin2007a]. This argument
+might not hold in general, especially when dealing with non-vertebrate hosts 
+such as insects which are short-lived in general.
+
+Another pattern is that very speciose lineages should host more generalist 
+parasites [@poulin2007a]. This is because parasites may often be less successful
+on species the more distantly they are related to their current hosts 
+[@perlman2003; @krasnov2004; @poulin2011]. Many closely related species creates
+somewhat of a bridge, allowing parasites to easily adapt to new host species and
+expand their host range. 
+
+Finally, host defences should have an effect on the degree to which their 
 parasites specialize. Weak host defences should allow parasites to be successful
 on a host with only minimal adaptation therefore allowing success on a wide 
-range of hosts. @moller2005 found that, in birds, species with weak immune
-responses host more generalist fleas, than birds with strong immune systems;
-this pattern was also observed for flatworms which parasitize freshwater fishes 
+range of hosts. @moller2005 found that, in birds, species with weak immune 
+responses host more generalist fleas, than birds with strong immune systems; 
+this pattern was also observed for flatworms which parasitize freshwater fishes
 [@locke2010].
 
 A very important topic in parasite ecology for us is the debate between the
@@ -62,22 +82,24 @@ make them able to infect a wide range of hosts [@krasnov2004a]. The trade-off
 hypothesis on the other hand, posits a trade-off; close adaptation to a host, 
 which allows a parasite to reach very high abundance on that host, come at the 
 expense of being less adapted to other hosts and therefore reaching lower 
-abundances on them [@poulin1998]. Many parasite-host systems were examined for 
-evidence towards one of these two hypothesis and many have found evidence for 
-resource breadth [@krasnov2004a]; many also have found evidence for the 
-trade-off hypothesis [@poulin1998; @poulin2004]; and still others have found no
-clear evidence for either [@morand2000]. Faced with these conflicting results, 
-authors have tried to explain these different outcomes with the phylogenetic 
-structure of the host community starting with @krasnov2004a and later refined by
-@pinheiro2016 in their *integrative hypothesis of parasite specialization*. This
-posits that both the trade-off and the resource-breadth effects are always in 
-effect but manifest at different phylogenetic scales. Adaptations that help a 
-parasite reach high abundance on a host also help it reach high abundances on 
-other hosts, but only those which are closely related, the effect diminishes the
-more distantly related the hosts. Since the phylogentic distance between a group
-of hosts do not vary smoothly but have abrupt jumps corresponding to deep 
-branches in the phylogeny, we can see both the niche-breadth and trade-off 
-patterns depending on how the study system is circumscribed.
+abundances on them [@poulin1998]. 
+
+Many parasite-host systems were examined for evidence towards one of these two 
+hypothesis and many have found evidence for resource breadth [@krasnov2004a]; 
+many also have found evidence for the trade-off hypothesis [@poulin1998; 
+@poulin2004]; and still others have found no clear evidence for either 
+[@morand2000]. Faced with these conflicting results, authors have tried to 
+explain these different outcomes with the phylogenetic structure of the host 
+community starting with @krasnov2004a and later refined by @pinheiro2016 in 
+their *integrative hypothesis of parasite specialization*. This posits that 
+both the trade-off and the resource-breadth effects are always in effect but 
+manifest at different phylogenetic scales. Adaptations that help a parasite 
+reach high abundance on a host also help it reach high abundances on other 
+hosts, but only those which are closely related, the effect diminishes the 
+more distantly related the hosts. Since the phylogentic distance between a 
+group of hosts do not vary smoothly but have abrupt jumps corresponding to 
+deep branches in the phylogeny, we can see both the niche-breadth and 
+trade-off patterns depending on how the study system is circumscribed.
 
 Many organisms, and especially parasites, will exhibit strong phylogenetic 
 signal in the resources they use. Their resource use is not statistically 
@@ -106,9 +128,9 @@ evolutionary history explain the current host community of a parasite. This also
 makes comparisons between different studies easier to make, since the values can
 be on a common scale of evolutionary time span.
 
-Given the relative simplicity of studying host-parasite relationships, there has
-been much work in this area, though mostly on vertebrate hosts. Much less work 
-has been done on insect hosts [@mlynarek2015]. Water-mite (Hydrachnidia) 
+Given the relative simplicity of studying host-parasite relationships, there 
+has been much work in this area, though mostly on vertebrate hosts. Much less 
+work has been done on insect hosts [@mlynarek2015]. Water-mite (Hydrachnidia) 
 parasitism on odonates provides an ideal model system for the study of 
 parasitism on insect hosts because of odonates’ widespread range, high 
 abundance, and relative ease of identification. While there has 
@@ -116,8 +138,7 @@ been research on the intensity of water-mite parasitism, much less is known
 about how specialized these mites are and what lineages of odonates host the 
 most specialized parasites [@loscerbo2020; @mlynarek2015]. This might be due to
 the difficulty in identifying water-mites to the species level given their lack
-of morphological variation. Here, we use molecular methods to identify mites 
-simply as sequence variants.
+of morphological variation.
 
 Odonates have single terrestrial adult stage, early instars, called nymphs are
 all aquatic. Newly hatched Arenurrus water mite larvae find final instar nymphs
@@ -139,9 +160,11 @@ The order Odonata consists of two major suborders: Anisoptera and Zygoptera
 anisopterans are generally larger than zygopterans and are generally present in
 lower local abundance. Dragonflies also tend to have stronger defences than 
 damselflies; their cuticles are thicker and they have stronger immune responses
-[@blondeau].The contrast between the two suborders would lead us to expect a 
-difference in selective pressures for parasites in each group. We would expect 
-that dragonflies being in lower local abundance would be more likely to 
+[@blondeau].
+
+The contrast between the two suborders would lead us to expect a difference in
+selective pressures for parasites in each group. We would expect that 
+dragonflies being in lower local abundance would be more likely to 
 experience local extinction; this should lead to dragonflies having more 
 generalist mites as the specialists would go extinct at higher rates. The higher
 local abundance of damselflies should also be able to support a larger
@@ -163,8 +186,9 @@ network we will attempt to answer two hypotheses:
 1. The suborder Zygoptera will host more specialist mites than Anisoptera as is
    suggested by the higher mite parasitism intensity.
 
-2. Zygoptera should have the more specialist parasites *because* they are
-   more abundant.
+2. Host abundance should be a significant predictor of the degree to which mites
+   specialize on their host. Mass should also be significant given it's
+   relationship with abundance.
 
 # 2	Methods
 
@@ -177,8 +201,10 @@ and had their mites counted. Field work each year was conducted according to
 a different sampling protocol. As such we can infer nothing about community 
 composition or abundances in general. The odonates from 2015 were the same 
 used for @arrowsmith2018 and @loscerbo2020 and were collected according to a 
-standardized sampling protocol. As such, we have abundance data for a subset
-of the data.
+standardized sampling protocol. As such, we have abundance data for only this 
+subset of the data. Most species in the whole dataset are also represented in 
+this subset. Since most analysis here is done at the host species level, most
+of our data points can be retained when using abundance as a predictor.
 
 Mites were removed under a dissecting scope and pooled into autoclaved 
 microtubes by species and by site. Such that at each site, one sample per 
@@ -198,6 +224,12 @@ Those from 2020 were treated the same way as those from 2019 but only stored for
 a few weeks. One sample from 2020 was stored immediately in 95% ethanol until 
 its mites were removed.
 
+Except for samples 1 through 5 which were a trial run, mites were stored in 95%
+ethanol before DNA extraction. The longest any sample spent between mite removal
+and DNA extraction was three months. To remove the ethanol in preparation for
+DNA extraction the microtubes were uncovered under a fume-hood and the ethanol
+was allowed to evaporate overnight.
+
 ![Map2.1](Sampling Sites.svg)
 <p class = "caption">
 Map 2.1 Odonate sampling sites across the Québec. (OpenStreetMaps)
@@ -213,34 +245,46 @@ for 5 minutes at a time for a total of 30 minutes over a 3-hour long digestion.
 Samples 1-5 from 2015 were a trial run, these were put in a bead mill for 2 
 minutes rather than using the vortex. One batch (samples 1-16) was also vortexed
 for 30 minutes before being put into the heat bath. Once in the heat bath, this
-batch was vortexed only ocassionaly as per the manual for a few seconds at a 
+batch was vortexed only occasionally as per the manual for a few seconds at a 
 time to agitate the material. Five negative control samples were also used which
-showed minimal cross-contamination. A 350 bp segment of Cytochrome Oxidase I was
-amplified using a MICOInt forward primer [@leray2013] and a Fold reverse primer 
-[@arribas2016]. All samples, including negative controls were amplified and 
-sequenced on an Illumina Miseq at the Université du Québec à Montréal CERMO-FC
-Genomics Platform using the MiSeq reagent kit v3 (2 x 300 cycles; Illumina).
+showed minimal cross-contamination. Samples were randomly assigned to batches
+for DNA extraction to ensure that any cross-contamination that occurs during the
+next steps is randomly distributed and would cause no bias to the results. All
+DNA samples were then stored in a -80C freezer until the next steps.
+
+A 350 bp segment of Cytochrome Oxidase I was amplified using a MICOInt forward 
+primer [@leray2013] and a Fold reverse primer [@arribas2016]. All samples, 
+including negative controls were amplified and sequenced on an Illumina Miseq 
+at the Université du Québec à Montréal CERMO-FC Genomics Platform using the 
+MiSeq reagent kit v3 (2 x 300 cycles; Illumina).
 
 ## 2.3	Sequence preparation and network construction
 
 The raw sequence data was prepared and chimeric sequences removed using DADA2 
-version 1.18.0 [@callahan2016]. 
+version 1.18.0 [@callahan2016]. Both forward and reverse reads had 26 
+nucleotides trimmed from the beginning of the sequence to remove primers.
+Sequences were dereplicated and ASVs inferred. Forward and reverse reads were
+merged with a minimum overlap of 10 nucleotides. Unless otherwise stated, the
+default settings from DADA2 were used.
 
-
-
-
-
-DADA2 was also used to assign taxonomy to all 
-the sequences using a reference database assembled from all Odonate and Arachnid sequences in
-the BOLD database as of September 2020 [@ratnasingham2007]. Any non-mite 
-sequences were filtered out on the basis of these taxonomy assignments.
+DADA2 was also used to assign taxonomy to all the samples. Since there is no
+established reference database for assigning mite taxonomy we created our own
+using all of the Arachnid and Odonate sequences stored in the BOLD database as
+of September 2020 as well as BOLD's taxonomic information [@ratnasingham2007].
+Any non-mite sequences were filtered out on the basis of these taxonomy 
+assignments.
 
 Rarefying read count data has been shown to throw away more data than necessary
 [@mcmurdie2014]. Instead, we used a variance stabilizing transformation from the 
 DESEq2 package [@anders2010]. Any ASV which still showed any abundance in a
-sample after transformation was counted as a detection of an interaction. We
-created a simple binary network since we have too few replicates of many species
-to confidently place probabilistic weights on the interactions.
+sample after transformation was counted as a detection of an interaction. All
+of the control samples showed no detections after this step except for a single
+positive detection in a PCR control. We created a simple binary network since we
+have too few replicates of many species to confidently place probabilistic 
+weights on the interactions. Interactions in this network correspond to positive
+detections of a mite ASV in a sample from an odonate species. Any mites recorded
+as interacting only with a single host species were excluded as these are likely
+simply do to incomplete sampling.
 
 ## 2.4	Determination of phylogenetic scale
 
@@ -253,14 +297,15 @@ evolutionary history.
 This is calculated as the phylogenetically weighted Simpson's diversity of each
 mite's host community [@rao1982]. When an ultrametric phylogeny is used, as we
 are, this gives the mean branch length to the most recent common ancestor of any
-pair of species in the community. In other words, the average age of all most
-recent common ancestors in the community. 
+pair of species in the community. In other words, the expected age of the most
+recent common ancestor of any two randomly selected hosts.
 
 This method is better than simply using the most recent common ancestor of all
 host species as an indication of the phylogentic breadth of a parasite because
-that would be very susceptible to sample contamination. A single false positive
-detection of a mite interaction with a species distantly related to its other
-hosts would cause a large shift in the resultant scale of that mite.
+that would be very susceptible to sample contamination or to rare observations
+on an incidental host. A detection of a mite interaction with a species 
+distantly related to its other hosts would cause a large shift in the resultant
+scale of that mite.
 
 ## 2.5 Statistical analyses
 
@@ -288,7 +333,7 @@ nodes toward or away from each other based on edge lengths in the phylogeny.
 As a response variable we used the number of specialists and the number of
 generalists on a particular odonate species with a binomial error structure.
 As predictors, we used the aforementioned phylogenetic term as well as the log
-average mass of the odonate host.
+transform of the average mass and abundance of an odonate host species.
 
 # 3	Results
 
@@ -302,7 +347,7 @@ above, the scale of the genera in Zygoptera. This is roughly in line with the
 work of @mlynarek2015 on Zygoptera where most of the mite OTUs they found 
 strayed very little out of a single genus of hosts. 
 
-![Figure 3.1](../figures/pscale_phylo_plot.svg){width=100%}
+![Figure 3.1](../figures/pscale_phylo_plot_edit.svg){width=100%}
 <p class = "caption">
 Figure 3.1 Phylogenetic scale of mites infesting odonates. Each point represents
 an interaction between a mite and its host. As such, multiple points represent 
@@ -315,29 +360,53 @@ source("scripts/tidying_up_regressions.r")
 
 ps <- summary(phylo_model)
 ms <- summary(mass_model)
+as <- summary(abun_model)
 pt <- as.data.frame(ps$s.table) 
-mt <- as.data.frame(ms$p.table) 
+mt <- as.data.frame(ms$p.table)
+at <- as.data.frame(as$p.table)
 
 pms <- summary(mass_phylo_model)
 pmt <- as.data.frame(pms$s.table)
+
+pas <- summary(abun_phylo_model)
+pat <- as.data.frame(pas$s.table)
 ```
 
-The GAM model predicting the proportion of specialists according to the odonate
-phylogeny is highly significant and has strong predictive power (Table 3.1). 
-Independently, mass predicts very well for the proportion of specialists as well
-(Table 3.2). This is as expected as we believe mass is probably the odonate
-trait which is driving this. Since mass is highly phylogenetically conserved in
-odonates, they share a very large amount of variance and it was impossible in
-our models to disentangle the two; only one predictor would be significant in
-the model depending on their order of entry despite independently being
-extremely significant predictors.
-
 |                   |Effective df|?? df        |Chi-squared  |p-value           |
-|-------------------|------------|-------------|-------------|------------------|
+|-------------------|:-----------|:------------|:------------|:-----------------|
 |Species            |`r pt$edf`  |`r pt$Ref.df`|`r pt$Chi.sq`|$`r pt$"p-value"`$|
 <p class = "caption">
 Table 3.1 GAM predicting proportion of specialists with the odonate phylogeny.
 R^2^_adj_ = `r ps$r.sq`
+</p>
+
+The GAM model predicting the proportion of specialists according to the odonate
+phylogeny is highly significant and has strong predictive power (Table 3.1). 
+Independently, both mass and abundance predict very well for the proportion of 
+specialists as well (Table 3.2 & 3.3). Since mass is highly phylogenetically 
+conserved in odonates, they share a very large amount of variance and it was 
+impossible in our models to disentangle the two; only one predictor would be 
+significant in the model depending on their order of entry despite independently
+being extremely significant predictors. Abundance would also become non
+significant when analyzed in the same model as the phylogenetic term.
+
+
+|          |Estimate          |Standard Error        |z-value            |p-value               |
+|----------|:-----------------|:---------------------|:------------------|:---------------------|
+|Intercept |`r mt$Estimate[1]`|`r mt$"Std. Error"[1]`|`r mt$"z value"[1]`|$`r mt$"Pr(>|z|)"[1]`$|
+|log(mass) |`r mt$Estimate[2]`|`r mt$"Std. Error"[2]`|`r mt$"z value"[2]`|$`r mt$"Pr(>|z|)"[2]`$|
+<p class = "caption">
+Table 3.2 GAM predicting proportion of specialists with the log of species
+average mass. R^2^_adj_ = `r ms$r.sq`
+</p>
+
+|          |Estimate          |Standard Error        |z-value            |p-value               |
+|----------|:-----------------|:---------------------|:------------------|:---------------------|
+|Intercept |`r at$Estimate[1]`|`r at$"Std. Error"[1]`|`r at$"z value"[1]`|$`r at$"Pr(>|z|)"[1]`$|
+|Abundance |`r at$Estimate[2]`|`r at$"Std. Error"[2]`|`r at$"z value"[2]`|$`r at$"Pr(>|z|)"[2]`$|
+<p class = "caption">
+Table 3.3 GAM predicting proportion of specialists with abundance of the host
+species. R^2^_adj_ = `r as$r.sq`
 </p>
 
 To demonstrate the strong phylogenetic conservation of mass in odonates, we fit
@@ -346,14 +415,10 @@ with the odonate phylogeny. Phylogeny was, as expected, highly significant
 (p = `r pmt$"p-value"`) and was a very strong predictor of odonate mass 
 (R^2^_adj_ = `r pms$r.sq`)
 
-|          |Estimate          |Standard Error        |z-value            |p-value             |
-|----------|------------------|----------------------|-------------------|--------------------|
-|Intercept |`r mt$Estimate[1]`|`r mt$"Std. Error"[1]`|`r mt$"z value"[1]`|$`r mt$"Pr(>|z|)"[1]`$|
-|log(mass) |`r mt$Estimate[2]`|`r mt$"Std. Error"[2]`|`r mt$"z value"[2]`|$`r mt$"Pr(>|z|)"[2]`$|
-<p class = "caption">
-Table 3.2 GAM predicting proportion of specialists with the log of species
-average mass. R^2^_adj_ = `r ms$r.sq`
-</p>
+A similar GAM model was fit predicting host species abundance (n = `r pas$n`) 
+with the host phylogeny. Phylogeny was marginally significant 
+(p = `r pat$"p-value"`) but had fairly strong predictive power 
+(R^2^_adj_ = `r pas$r.sq`)
 
 ```{r, out.width="100%"}
 library(tidyverse)
@@ -364,21 +429,28 @@ odonates <- read_csv("datasets_derived/odonate_summaries.csv") %>%
   filter(spec_ratio < Inf)
 
 p1 <- ggplot(aes(x = mass, y = spec_ratio), data = odonates) +
-        geom_point() +
         scale_x_log10() +
-        xlab("Average Mass of Host") +
-        ylab("Ratio of Specialists to Generalists")
+        geom_point() +
+        geom_smooth(method = "gam", formula = y ~ x) + 
+        xlab("Log Average Mass of Host") +
+        ylab("Ratio of Specialists to Generalists") +
+        theme(text = element_text(family = c("Futura Medium", "Futurea LT"))) + 
+        coord_cartesian(ylim = c(0, 1.2))
+ggsave("figures/mass_spec_ratio.svg", p1)
 #-------------------------------------------------------------------------------
 odonates <- drop_na(odonates, abundance)
 
 p2 <- ggplot(aes(x = abundance, y = spec_ratio), data = odonates) +
         geom_point() +
+        geom_smooth(method = "gam", formula = y~x) +
         xlab("Abundnace of Host") +
-        ylab("")
+        ylab("") +
+        theme(text = element_text(family = c("Futura Medium", "Futurea LT"))) +
+        coord_cartesian(ylim = c(0, 1.2))
+ggsave("figures/abun_spec_ratio.svg", p2 + ylab("Ratio of Specialists to Generalists"))
 
 plot_grid(p1, p2)
 ```
-
 <p class = "caption">
 Figure 3.2 **Left panel:** The ratio of specialists to generalist on a host 
 species versus the average mass of that species. **Right panel:** The ratio if 
@@ -388,16 +460,59 @@ species. Mass is on a log scale. A single species was filtered out,
 recorded.
 </p>
 
-Host abundance also was a significant predictor of the specialization of the 
-parasite community. In a similar fashion to mass, abundance is phylogenetically
-conserved. While significant on its own, when considered in a model with the
-phylogenetic term, it has a very marginal p-value.
-
 # 4	Discussion 
 
-[[@moller2005]. Saw a triangular pattern like us, but we saw the mirror of what 
-I would’ve predicted based on this why? Their high immune response birds were 
-also colonial]
+As expected from their higher parasitism intensity, we find more specialist 
+parasites on damselflies than on dragonflies [@pinheiro2016]. We also found that
+host abundance was a significant predictor of the ratio of specialists to
+generalists on a host, but was a much weaker predictor than mass. In fact, mass
+was almost exactly as strong of a predictor of specialization as the phylogeny
+was (R^2^_adj_ = `r ms$r.sq` vs. `r ps$r.sq`) suggesting that mass might be the
+trait which drives the phylogenetic trend. Mass was included in this analysis
+since we have much more mass data and it was thought to be related to host
+abundance. The strong predictive power seems to indicate that mass is also
+strongly associated with other traits beyond abundance which drive selection
+for or against parasite specialization on a host.
+
+[@moller2005] saw a triangular pattern similar to ours where some lineages had
+both generalists and specialists and some had only generalists in a bird-flea
+system. They saw the specialists occurring only on the birds with stronger
+immune responses. They're explanation was that antagonistic coevolution leads
+the birds to develop stronger immune responses to parasites while the parasites
+must become ever more specialized on a narrow set of hosts to overcome these
+defences. In their study system, birds which had strong immune responses were
+also colonial nesters. It might be that this process of antagonistic coevolution
+only exerted extra selective pressure towards specialization on parasites which
+already were specialist due to colonial birds being more reliable hosts. In a 
+study of malaria parasites, the same association between host mass, host 
+abundance, and parasite specialization was found, with the authors making the
+argument of host reliability leads to specialization [@svensson-coelho2016]
+
+Since the ecology of the system that @moller2005 studied is different from our
+own in that strong host defences and high host reliability do not coincide in
+the same lineage of hosts, we might expect to find the opposite relationship
+between host defences and host specialization in our system. Dragonflies have
+have thicker cuticles and a stronger immune response; they are also less 
+attractive hosts since they are less abundant [@blondeau]. The extra predictive
+power that mass had which abundance did not may be related to host defences. 
+Smaller hosts may have less energy to expend on a strong immune response and a 
+thick cuticle, producing an association between parasite specialization and 
+mass.
+
+Like many ecological studies, ours is subject to uneven and incomplete sampling.
+Dragonflies are often much more difficult to catch than damselflies and so may
+be less represented in our dataset that they are be in nature. Moreover we have
+better coverage of the phylogeny where they are more abundant and easier to 
+catch. More species in Coenagrionidae than in Gomphidae or Aeshnidae, etc.
+It is also difficult to confidently declare a lack of interactions of parasite
+interactions for a host species, especially when we have only caught that
+species a few times and it is known to have low parasite intensity. Nonetheless
+these results are unlikely to to be the result of any sampling artifact. 
+the phylogenetic Simpson's diversity of a parasite's host community should be
+biased to lower values when that community is undersampled. Undersampling should
+have made Dragonflies appear to have more specialist parasites than they did.
+Despite this, we found the pattern that damselflies had more specialist
+parasites.
 
 # 5 References
 
