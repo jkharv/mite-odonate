@@ -15,6 +15,16 @@ get_name <- function(x){
 }
 get_name <- Vectorize(get_name)
 
+get_num_mites <- function(x){
+  n <- filter(samples, sample_code == substring(x, 2))
+  if(nrow(n) == 1){
+    return(n$mite_num)
+  } else {
+    return(NA)
+  }
+}
+get_num_mites <- Vectorize(get_num_mites)
+
 remove_singletons <- function(mites){
   
   m <- mutate(mites, across(is.numeric, ceiling))
@@ -34,7 +44,8 @@ samples <- read_csv("datasets_primary/mite_samples.csv")
 mites <- read_csv("datasets_derived/sequencing/mite_sequences_annotated.csv")
 
 samples <- samples %>% 
-  rename(c(sample_code = "Sample Code", odonate_spp = "Odonate Species")) %>%
+  rename(c(sample_code = "Sample Code", odonate_spp = "Odonate Species",
+           mite_num = "Est Num. of Mites")) %>%
   mutate(odonate_spp = str_replace_all(odonate_spp, " ", "_"))
 
 controls <- mites %>%
@@ -58,7 +69,10 @@ mites <- mites %>%
 mites <- mites %>%
   as.data.frame() %>%
   rownames_to_column("odonate_spp") %>%
-  mutate(across(is.numeric, Vectorize(function(x) if(x > 0){1}else{0}))) %>% # filter pos detec. from vst
+  mutate(across(is.numeric, Vectorize(function(x) if(x > 0){1}else{0}))) %>%# filter pos detec. from vst
+  filter(rowSums(across(where(is.numeric))) < get_num_mites(odonate_spp)) # Remove samples with more sequences than mites 
+
+mites <- mites %>%
   mutate(odonate_spp = get_name(odonate_spp)) %>% # Getting the spp for each sample code
   group_by(odonate_spp) %>%
   summarise(across(everything(), sum)) %>% #Sum s/t number indicates number of times an association is detected
