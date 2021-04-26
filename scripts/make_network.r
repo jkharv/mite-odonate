@@ -70,7 +70,7 @@ mites <- mites %>%
   as.data.frame() %>%
   rownames_to_column("odonate_spp") %>%
   mutate(across(is.numeric, Vectorize(function(x) if(x > 0){1}else{0}))) %>%# filter pos detec. from vst
-  filter(rowSums(across(where(is.numeric))) < get_num_mites(odonate_spp)) # Remove samples with more sequences than mites 
+  filter(rowSums(across(where(is.numeric))) <= get_num_mites(odonate_spp)) # Remove samples with more sequences than mites 
 
 mites <- mites %>%
   mutate(odonate_spp = get_name(odonate_spp)) %>% # Getting the spp for each sample code
