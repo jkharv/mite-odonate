@@ -86,7 +86,12 @@ mite_points <- network %>%
 specialist <- mite_points %>%
   mutate(specialist = ifelse(mite_scale <= 100, 1, 0)) %>%
   mutate(generalist = ifelse(mite_scale > 100, 1, 0)) %>%
-  select(odonate_spp, specialist, generalist) %>%
+  mutate(specialist_50 = ifelse(mite_scale <= 50, 1, 0)) %>%
+  mutate(generalist_50 = ifelse(mite_scale > 50, 1, 0)) %>%
+  mutate(specialist_25 = ifelse(mite_scale <= 25, 1, 0)) %>%
+  mutate(generalist_25 = ifelse(mite_scale > 25, 1, 0)) %>%
+  select(odonate_spp, specialist, generalist, specialist_25, 
+         generalist_25, specialist_50, generalist_50) %>%
   group_by(odonate_spp) %>%
   summarise_all(sum)  %>%
   rename(species = odonate_spp) %>%
