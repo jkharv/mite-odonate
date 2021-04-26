@@ -242,15 +242,16 @@ were performed according to the manual except that two 2.3 mm stainless steel
 beads (BioSpec Products) were added to each tube to increase cell disruption.
 During the lysis step the samples were removed from their heat bath and vortexed 
 for 5 minutes at a time for a total of 30 minutes over a 3-hour long digestion. 
-Samples 1-5 from 2015 were a trial run, these were put in a bead mill for 2 
+The first 5 samples were a trial run, these were put in a bead mill for 2 
 minutes rather than using the vortex. One batch (samples 1-16) was also vortexed
 for 30 minutes before being put into the heat bath. Once in the heat bath, this
-batch was vortexed only occasionally as per the manual for a few seconds at a 
-time to agitate the material. Five negative control samples were also used which
-showed minimal cross-contamination. Samples were randomly assigned to batches
-for DNA extraction to ensure that any cross-contamination that occurs during the
-next steps is randomly distributed and would cause no bias to the results. All
-DNA samples were then stored in a -80C freezer until the next steps.
+batch was vortexed only occasionally as per the manufacturer's instruction for 
+a few seconds at a time to agitate the material. Five negative control samples 
+were also used which showed minimal cross-contamination. Samples were randomly 
+assigned to batches for DNA extraction to ensure that any cross-contamination 
+that occurs during the next steps is randomly distributed and would cause no 
+bias to the results. All DNA samples were then stored in a -80C freezer until 
+the next steps.
 
 A 350 bp segment of Cytochrome Oxidase I was amplified using a MICOInt forward 
 primer [@leray2013] and a Fold reverse primer [@arribas2016]. All samples, 
@@ -318,6 +319,11 @@ level. This value was chosen because there is a natural gap in the distribution
 of phylogenetic scales at around that value imposed by long branches in the
 phylogeny.
 
+To test how sensitive the analysis is to our choice of phylogentic scale for 
+classifying mites as specialist or generalist we re-ran the models using
+different values for the cutoff --  25 Ma, and 50 Ma --  to ensure all the
+results remain significant.
+
 We use Generalized Additive Models (GAMs) from the `mgcv` package [@wood2017]
 to do phylogenetic regression. The phylogeny was represented using the Markov
 Random Field (MRF) basis provided in the package. A MRF is a graphical model
@@ -372,7 +378,7 @@ pas <- summary(abun_phylo_model)
 pat <- as.data.frame(pas$s.table)
 ```
 
-|                   |Effective df|?? df        |Chi-squared  |p-value           |
+|                   |Effective df|Ref df       |Chi-squared  |p-value           |
 |-------------------|:-----------|:------------|:------------|:-----------------|
 |Species            |`r pt$edf`  |`r pt$Ref.df`|`r pt$Chi.sq`|$`r pt$"p-value"`$|
 <p class = "caption">
@@ -400,10 +406,10 @@ Table 3.2 GAM predicting proportion of specialists with the log of species
 average mass. R^2^_adj_ = `r ms$r.sq`
 </p>
 
-|          |Estimate          |Standard Error        |z-value            |p-value               |
-|----------|:-----------------|:---------------------|:------------------|:---------------------|
-|Intercept |`r at$Estimate[1]`|`r at$"Std. Error"[1]`|`r at$"z value"[1]`|$`r at$"Pr(>|z|)"[1]`$|
-|Abundance |`r at$Estimate[2]`|`r at$"Std. Error"[2]`|`r at$"z value"[2]`|$`r at$"Pr(>|z|)"[2]`$|
+|               |Estimate          |Standard Error        |z-value            |p-value               |
+|---------------|:-----------------|:---------------------|:------------------|:---------------------|
+|Intercept      |`r at$Estimate[1]`|`r at$"Std. Error"[1]`|`r at$"z value"[1]`|$`r at$"Pr(>|z|)"[1]`$|
+|log(Abundance) |`r at$Estimate[2]`|`r at$"Std. Error"[2]`|`r at$"z value"[2]`|$`r at$"Pr(>|z|)"[2]`$|
 <p class = "caption">
 Table 3.3 GAM predicting proportion of specialists with abundance of the host
 species. R^2^_adj_ = `r as$r.sq`
@@ -434,8 +440,7 @@ p1 <- ggplot(aes(x = mass, y = spec_ratio), data = odonates) +
         geom_smooth(method = "gam", formula = y ~ x) + 
         xlab("Log Average Mass of Host") +
         ylab("Ratio of Specialists to Generalists") +
-        theme(text = element_text(family = c("Futura Medium", "Futurea LT"))) + 
-        coord_cartesian(ylim = c(0, 1.2))
+        theme(text = element_text(family = c("Futura Medium", "Futurea LT"))) 
 ggsave("figures/mass_spec_ratio.svg", p1)
 #-------------------------------------------------------------------------------
 odonates <- drop_na(odonates, abundance)
@@ -445,8 +450,7 @@ p2 <- ggplot(aes(x = abundance, y = spec_ratio), data = odonates) +
         geom_smooth(method = "gam", formula = y~x) +
         xlab("Abundnace of Host") +
         ylab("") +
-        theme(text = element_text(family = c("Futura Medium", "Futurea LT"))) +
-        coord_cartesian(ylim = c(0, 1.2))
+        theme(text = element_text(family = c("Futura Medium", "Futurea LT")))
 ggsave("figures/abun_spec_ratio.svg", p2 + ylab("Ratio of Specialists to Generalists"))
 
 plot_grid(p1, p2)
@@ -458,6 +462,60 @@ specialists to generalist on a host species versus the abundance of that
 species. Mass is on a log scale. A single species was filtered out, 
 *Leucorrhinia hudsonica*, which had only a single specialist and no generalists
 recorded.
+</p>
+
+```{r}
+source("scripts/specialization_gam_models.r")
+# Checking the phylo model for sensitivity.
+spec_gen_25 <- cbind(odonates$specialist_25, odonates$generalist_25)
+phylo_model_25 <- gam(spec_gen_25 ~ s(species, bs = 'mrf', 
+                                  xt = list(penalty = pmatrix), k = 10), 
+                   data = odonates, method = "REML", family = binomial)
+phylo_25_p <- summary(phylo_model_25)$p.table[,"Pr(>|z|)"]
+
+spec_gen_50 <- cbind(odonates$specialist_50, odonates$generalist_50)
+phylo_model_50 <- gam(spec_gen_50 ~ s(species, bs = 'mrf', 
+                                  xt = list(penalty = pmatrix), k = 10), 
+                   data = odonates, method = "REML", family = binomial)
+phylo_50_p <- summary(phylo_model_25)$p.table[,"Pr(>|z|)"]
+
+# Checking the mass model for sensitivity.
+mass_model_25 <- gam(spec_gen_25 ~ log(mass), 
+         data = odonates, method = "REML", family = binomial)
+mass_25_p <- summary(mass_model_25)$p.table[2,"Pr(>|z|)"]
+
+mass_model_50 <- gam(spec_gen_50 ~ log(mass), 
+         data = odonates, method = "REML", family = binomial)
+mass_50_p <- summary(mass_model_50)$p.table[2,"Pr(>|z|)"]
+
+# Checking the abundance model for sensitivity.
+spec_gen_abun_25 <- cbind(odonates_abun$specialist_25, 
+                          odonates_abun$generalist_25)
+
+abun_model_25 <- gam(spec_gen_abun_25 ~ log(abundance), 
+                     data = odonates_abun, method = "REML", family = binomial)
+abun_25_p <- summary(abun_model_25)$p.table[2,"Pr(>|z|)"]
+
+spec_gen_abun_50 <- cbind(odonates_abun$specialist_50, 
+                          odonates_abun$generalist_50)
+abun_model_50 <- gam(spec_gen_abun_50 ~ log(abundance), 
+                     data = odonates_abun, method = "REML", family = binomial)
+abun_50_p <- summary(abun_model_50)$p.table[2,"Pr(>|z|)"]
+
+```
+
+
+|Model         |Cut-off|p-value          |
+|:-------------|:-----:|:---------------:|
+|Phylogeny     |50 Ma  |$`r phylo_50_p`$ |
+|log(Abundance)|50 Ma  |$`r abun_50_p`$  |
+|log(Mass)     |50 Ma  |$`r mass_50_p`$  |
+|Phylogeny     |25 Ma  |$`r phylo_25_p`$ |
+|log(Abundance)|25 Ma  |$`r abun_25_p`$  |
+|log(Mass)     |25 Ma  |$`r mass_25_p`$  |
+<p class = "caption">
+Table 3.4 Results of sensitivity analysis for the cut-off value defining
+generalist and specialist mites.
 </p>
 
 # 4	Discussion 
