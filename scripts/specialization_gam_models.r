@@ -48,11 +48,11 @@ mass_model <- gam(spec_gen ~ log(mass),
 # Is specialization predicted by host abundance?
 #
 
-odonates <- drop_na(odonates, abundance)
-spec_gen <- cbind(odonates$specialist, odonates$generalist)
+odonates_abun <- drop_na(odonates, abundance)
+spec_gen_abun <- cbind(odonates_abun$specialist, odonates_abun$generalist)
 
-abun_model <- gam(spec_gen ~ abundance, 
-                  data = odonates, method = "REML", family = binomial)
+abun_model <- gam(spec_gen_abun ~ log(abundance), 
+                  data = odonates_abun, method = "REML", family = binomial)
 #summary(abun_model)
 
 #appraise(abun_model)
