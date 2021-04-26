@@ -13,7 +13,7 @@ keep <- intersect(phylo$tip.label, mites$species)
 mites <- filter(mites, species %in% keep)
 phylo <- keep.tip(phylo, keep)
 
-tree <- ggtree(phylo) +
+tree <- ggtree(phylo, ladderize = TRUE) +
   geom_tiplab() + 
   xlim_tree(500) +
   theme_tree2()
