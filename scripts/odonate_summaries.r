@@ -1,6 +1,8 @@
 # Author: Jacob Harvey - jakekharvey@gmail.com
 
 library(tidyverse)
+library(ape)
+library(phytools)
 
 a2015 <- read_csv("datasets_primary/2015_data.csv", na = c("", "NA", "N/A", "n/a"))
 a2019 <- read_csv("datasets_primary/2019_data.csv", na = c("", "NA", "N/A", "n/a"))
@@ -105,4 +107,13 @@ spp_avg <- mite_points %>%
 odonates <- list(prevalences, masses, abundances, specialist, spp_avg) %>%
             reduce(function(x, y) full_join(x, y, by = "species")) 
                      
+# Add col for suborder, useful for plots later
+phylo <- read.nexus("datasets_primary/phylogeny/FinalOdonatetree.tre")
+zygoptera_mrca <- getMRCA(phylo, c("Lestes_congener", "Enallagma_hageni"))
+zygoptera <- getDescendants(phylo, zygoptera_mrca)
+zygoptera <- keep.tip(phylo, zygoptera)
+
+odonates <- mutate(odonates, suborder = if_else(species %in% zygoptera$tip.label, 
+                                                "Zygoptera", "Anisoptera"))
+
 write_csv(odonates, "datasets_derived/odonate_summaries.csv")
