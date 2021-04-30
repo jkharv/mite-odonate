@@ -1,0 +1,91 @@
+body{
+  font-family: garamond;
+}
+
+p{
+  text-align: justify;
+  text-indent: 2em;
+  break-inside: avoid;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#references * p{
+    text-indent: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+h1 {
+  font-size: larger;
+  break-inside: avoid;
+  font-family: Futura LT;
+}
+h1::after {
+    content: "";
+    display: block;
+    height: 100px;
+    margin-bottom: -100px;
+}
+
+h2{
+  font-size: medium;
+  break-inside: avoid;
+  font-family: Futura LT;
+}
+h2::after {
+    content: "";
+    display: block;
+    height: 100px;
+    margin-bottom: -100px;
+}
+
+table{
+  break-inside: avoid;
+  font-family: Futura LT;
+
+}
+
+.caption{
+  page-break-before: avoid;
+  font-weight: lighter;
+  font-family: Futura LT;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  text-indent: 0;
+
+}
+
+.title_page{
+  break-inside: avoid;
+  page-break-after: always;
+  text-align: center;
+}
+
+.title{
+  padding-top: 25%;
+  font-weight: bold;
+  font-size: 16pt;
+  font-family: Futura LT;
+}
+
+.author_line{
+  padding-top: 5em;
+  padding-bottom: 50%;
+}
+
+.info_line{
+  padding-top: 3em;
+}
+
+.abstract_page{
+  break-inside: avoid;
+  page-break-after: always;
+  text-align: center;
+}
+
+@page {
+   @bottom-right {
+    content: counter(page);
+   }
+}
