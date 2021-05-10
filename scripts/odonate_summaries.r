@@ -1,6 +1,8 @@
 # Author: Jacob Harvey - jakekharvey@gmail.com
 
 library(tidyverse)
+library(ape)
+library(phytools)
 
 a2015 <- read_csv("datasets_primary/2015_data.csv", na = c("", "NA", "N/A", "n/a"))
 a2019 <- read_csv("datasets_primary/2019_data.csv", na = c("", "NA", "N/A", "n/a"))
@@ -86,10 +88,16 @@ mite_points <- network %>%
 specialist <- mite_points %>%
   mutate(specialist = ifelse(mite_scale <= 100, 1, 0)) %>%
   mutate(generalist = ifelse(mite_scale > 100, 1, 0)) %>%
-  select(odonate_spp, specialist, generalist) %>%
+  mutate(specialist_50 = ifelse(mite_scale <= 50, 1, 0)) %>%
+  mutate(generalist_50 = ifelse(mite_scale > 50, 1, 0)) %>%
+  mutate(specialist_25 = ifelse(mite_scale <= 25, 1, 0)) %>%
+  mutate(generalist_25 = ifelse(mite_scale > 25, 1, 0)) %>%
+  select(odonate_spp, specialist, generalist, specialist_25, 
+         generalist_25, specialist_50, generalist_50) %>%
   group_by(odonate_spp) %>%
   summarise_all(sum)  %>%
-  rename(species = odonate_spp)
+  rename(species = odonate_spp) %>%
+  mutate(spec_ratio = specialist/generalist)
 
 spp_avg <- mite_points %>%
   group_by(odonate_spp) %>%
@@ -97,6 +105,15 @@ spp_avg <- mite_points %>%
   rename(species = odonate_spp)
 
 odonates <- list(prevalences, masses, abundances, specialist, spp_avg) %>%
-            reduce(function(x, y) full_join(x, y, by = "species"))
+            reduce(function(x, y) full_join(x, y, by = "species")) 
                      
+# Add col for suborder, useful for plots later
+phylo <- read.nexus("datasets_primary/phylogeny/FinalOdonatetree.tre")
+zygoptera_mrca <- getMRCA(phylo, c("Lestes_congener", "Enallagma_hageni"))
+zygoptera <- getDescendants(phylo, zygoptera_mrca)
+zygoptera <- keep.tip(phylo, zygoptera)
+
+odonates <- mutate(odonates, suborder = if_else(species %in% zygoptera$tip.label, 
+                                                "Zygoptera", "Anisoptera"))
+
 write_csv(odonates, "datasets_derived/odonate_summaries.csv")
