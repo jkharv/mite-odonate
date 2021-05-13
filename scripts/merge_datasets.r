@@ -78,15 +78,12 @@ a2015 <- a2015 %>%
   rename(Mass = "Mass (g)") %>%
   rename(Note = "Notes")
 
-
 # Both datasets need to have Date type for the date col.
 a2015$Date <- dmy(a2015$Date)
 
 # Renaming columns in immune_study which need renaming.
 immune_study <- immune_study %>%
   rename(Mass = "Weight(g)")
-
-
 
 odonates <- full_join(a2015, immune_study)
 
