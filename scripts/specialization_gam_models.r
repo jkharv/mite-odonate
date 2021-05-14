@@ -10,7 +10,7 @@ library(gratia)
 odonates <- read_csv("datasets_derived/odonate_summaries.csv")
 
 odonates <- odonates %>% 
-  drop_na(mite_scale_mean) %>%
+  drop_na(specialist) %>%
   filter(generalist > 0) # no div zero
 odonates$species <- factor(odonates$species)
 
