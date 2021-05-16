@@ -12,7 +12,7 @@ library(picante)
 library(DECIPHER)
 library(Biostrings)
 library(speedyseq)
-ncores = 8
+ncores = 3
 
 # Reference
 # https://benjjneb.github.io/dada2/tutorial.html
@@ -153,9 +153,7 @@ rownames(track) <- sample.names # Row names
 head(track) 
 print(track)
 
-
 # graph it
-
 gtrack<- track[,c(1,2,4,6)]
 gtrack$ID <- rownames(gtrack)
 
@@ -170,7 +168,6 @@ bar_track <- ggplot(lgtrack ,aes(x=ID, y=as.numeric(value), fill=variable)) +
   ggtitle("Track")# Main title
 bar_track
 
-
 #try Steve track code again
 getN <- function(x) sum(getUniques(x))
 track_S2 <- cbind(out.MITES, sapply(dadaFs, getN), sapply(mergers, getN), rowSums(seqtab), rowSums(seqtab.nochim))
@@ -178,19 +175,55 @@ colnames(track_S2) <- c("input", "filtered", "denoised", "merged", "tabled", "no
 rownames(track_S2) <- sample.names
 head(track_S2)
 
-
 # assign taxonomoy --> must blast files?
-
-save.image("dada2_MITES_JUL6.20.RData")
+#save.image("dada2_MITES_JUL6.20.RData")
 
 seqtab_asv_out <- as.data.frame(t(seqtab.nochim))
 seqtab_asv_out <- rownames_to_column(seqtab_asv_out, var = "ASV.sequence")
   
 write.csv(seqtab_asv_out, file = "datasets_derived/sequencing/mite_sequences.csv")
 
-
 ### Maybe try to Clump ASVs to OTUs -------------------------
 # https://github.com/benjjneb/dada2/issues/947
+
+# OTUs at 97%
+asv_sequences <- colnames(seqtab.nochim)
+sample_names <- rownames(seqtab.nochim)
+dna <- Biostrings::DNAStringSet(asv_sequences)
+
+nproc <- ncores # Increase to use multiple processors
+aln <- DECIPHER::AlignSeqs(dna, processors = nproc)
+d <- DECIPHER::DistanceMatrix(aln, processors = nproc)
+clusters <- DECIPHER::IdClusters(
+                                 d, 
+                                 method = "complete",
+                                 cutoff = 0.03, # use `cutoff = 0.03` for a 97% OTU 
+                                 processors = nproc
+                                )
+
+## Use dplyr to merge the columns of the seqtab matrix for ASVs in the same OTU
+# prep by adding sequences to the `clusters` data frame
+clusters <- clusters %>%
+  add_column(sequence = asv_sequences)
+
+seqs <- seqtab.nochim %>%
+  t() %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "sequence") %>%
+  full_join(clusters, by = "sequence")
+
+otu_tab <- seqs %>%
+  group_by(cluster) %>%
+  summarize(across(.cols = contains("_"), sum)) %>%
+  left_join(select(seqs, c(sequence, cluster)), by = "cluster") %>%
+  distinct(cluster, .keep_all = TRUE) %>%
+  relocate(c(cluster, sequence)) %>%
+  select(2:last_col()) %>%
+  rename("sequence" = "ASV.sequence")
+
+write.csv(otu_tab, file = "datasets_derived/sequencing/mite_sequences_otu97.csv")
+
+# OTUs at 90%
 asv_sequences <- colnames(seqtab.nochim)
 sample_names <- rownames(seqtab.nochim)
 dna <- Biostrings::DNAStringSet(asv_sequences)
@@ -201,51 +234,28 @@ d <- DECIPHER::DistanceMatrix(aln, processors = nproc)
 clusters <- DECIPHER::IdClusters(
   d, 
   method = "complete",
-  cutoff = 0.03, # use `cutoff = 0.03` for a 97% OTU 
+  cutoff = 0.1, # use `cutoff = 0.03` for a 97% OTU 
   processors = nproc
 )
-
 
 ## Use dplyr to merge the columns of the seqtab matrix for ASVs in the same OTU
 # prep by adding sequences to the `clusters` data frame
 clusters <- clusters %>%
   add_column(sequence = asv_sequences)
 
+seqs <- seqtab.nochim %>%
+  t() %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "sequence") %>%
+  full_join(clusters, by = "sequence")
 
-merged_seqtab <- seqtab.nochim %>% 
-  t %>%
-  rowsum(clusters$cluster) %>%
-  t
+otu_tab <- seqs %>%
+  group_by(cluster) %>%
+  summarize(across(.cols = contains("_"), sum)) %>%
+  left_join(select(seqs, c(sequence, cluster)), by = "cluster") %>%
+  distinct(cluster, .keep_all = TRUE) %>%
+  relocate(c(cluster, sequence)) %>%
+  select(2:last_col()) %>%
+  rename("sequence" = "ASV.sequence")
 
-dim(merged_seqtab) # 94 274
-
-
-# Optional renaming of clusters to OTU<cluster #>
-colnames(merged_seqtab) <- paste0("OTU", colnames(merged_seqtab))
-
-seqtab_otu_out <- as.data.frame(t(seqtab.nochim))
-seqtab_otu_out <- rownames_to_column(seqtab_otu_out, var = "ASV.sequence")
-
-write.csv(merged_seqtab, file = "datasets_derived/sequencing/mite_sequences_otu.csv")
-
-## Try to make a fasta file of each OTU --------------
-#ASV is column of all the original ASV sequences and C.ASV is the new column of clustered ASVs based on the 
-# mapping to those orig. ASVs.
-
-# newdf<-as.data.frame(cbind.data.frame(rownames(clusters),clusters$cluster,clusters$sequence))
-# colnames(newdf) <- c("ASV","C.ASV","sequence")
-
-# #Then arrange by C.ASV and keep only the first of duplicated ASVs 
-# (there are 70 clustered ASVs  from an original 177 DADA2 ASVs):
-
-# newdf.sort <- newdf %>% arrange(C.ASV) %>% distinct(C.ASV,.keep_all = TRUE)
-
-# # create a fasta file of the new OTUs for taxonomic assignment, 
-# # in thier proper order (to match the OTUs in merged_seqtab) :
-
-# fas <- paste(">OTU",seq(1:nrow(newdf.sort)),"\n",newdf.sort$sequence,sep="")
-
-
-# write.table(fas,file="MITES_OTU.fas", row.names=FALSE, col.names=FALSE,quote = FALSE)
-
-
+write.csv(otu_tab, file = "datasets_derived/sequencing/mite_sequences_otu90.csv")
