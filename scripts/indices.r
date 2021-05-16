@@ -2,8 +2,6 @@
 
 library(picante)
 
-source("scripts/phylo_scale.r")
-
 bin_network <- read_csv("datasets_derived/bin_network.csv")
 
 # Filtering out species that we don't have in our phylogeny.
@@ -15,15 +13,6 @@ bin_network <- bin_network %>%
 
 phylo_path <- "datasets_primary/phylogeny/FinalOdonatetree.tre"
 phylo <- read.nexus(phylo_path)
-
-#~~~~~~~~~~~~~~~~~~~Phylo scale~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# Partial application to fix all the parameters but mite.
-# Also vectorize cause mutate needs this.
-partial_scale <- Vectorize(function(m){combinational_phylo_scale(bin_network, phylo, m)})
-
-mites <- tibble(mite = colnames(bin_network)[-1]) %>%
-  mutate(combo_phylo_scale = partial_scale(mite))
 
 #~~~~~~~~~~~~~~~~~~Resource Range~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
