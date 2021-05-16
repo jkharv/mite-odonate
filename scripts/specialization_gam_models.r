@@ -7,8 +7,8 @@ library(mgcv)
 library(car)
 library(gratia)
 
-odonates <- read_csv("datasets_derived/odonate_summaries.csv")
-
+odonates <- read_csv("datasets_derived/odonate_summaries_asv.csv")
+                                              # _otu90 _otu97 asv
 odonates <- odonates %>% 
   drop_na(specialist) %>%
   filter(generalist > 0) # no div zero
@@ -67,7 +67,7 @@ spec_gen_abun <- cbind(odonates_abun$specialist, odonates_abun$generalist)
 
 abun_model <- gam(spec_gen_abun ~ log(abundance), 
                   data = odonates_abun, method = "REML", family = binomial)
-summary(abun_model)
+#summary(abun_model)
 #appraise(abun_model)
 
 # Sensitivity analysis
