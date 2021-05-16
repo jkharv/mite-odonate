@@ -10,6 +10,3 @@ remotes::install_github("jkharv/MRFtools")
 BiocManager::install("phyloseq")
 BiocManager::install("DESeq2")
 remotes::install_github("mikemc/speedyseq")
-
-
-
