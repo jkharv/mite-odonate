@@ -1,0 +1,98 @@
+---
+title: "paper"
+author: "Jacob K. Harvey"
+date: "18/05/2021"
+output:
+  html_document: 
+    css: "../documents/thesis_style.css"
+bibliography: bibliography.json
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = FALSE)
+options(digits = 2, scipen = -2)
+```
+
+## Comparison of specialization models
+```{r}
+library(readr)
+odonates <- read_csv("datasets_derived/odonate_summaries_asv.csv")
+source("scripts/specialization_gam_models.r")
+
+pm <- summary(phylo_model)
+im <- summary(immune_model)
+mm <- summary(mass_model)
+am <- summary(abun_model)
+```
+|Model                   |Estimate             |p-value           |
+|:-----------------------|:--------------------|:-----------------|
+|Host Phylogeny          |??                   |$`r pm$s.pv`$     |
+|Log Host Immune Response|$`r im$p.coeff[[2]]`$|$`r im$p.pv[[2]]`$|
+|Log Host Mass           |$`r mm$p.coeff[[2]]`$|$`r mm$p.pv[[2]]`$|
+|Log Host Abundance      |$`r am$p.coeff[[2]]`$|$`r am$p.pv[[2]]`$|
+
+## Sensitivity to phylogenetic v. non-phylogenetic indices (host range)
+```{r}
+pmnh <- summary(phylo_model_nhost)
+imnh <- summary(immune_model_nhost)
+mmnh <- summary(mass_model_nhost)
+amnh <- summary(abun_model_nhost)
+```
+|Model                   |Estimate               |p-value             |
+|:-----------------------|:----------------------|:-------------------|
+|Host Phylogeny          |??                     |$`r pmnh$s.pv`$     |
+|Log Host Immune Response|$`r imnh$p.coeff[[2]]`$|$`r imnh$p.pv[[2]]`$|
+|Log Host Mass           |$`r mmnh$p.coeff[[2]]`$|$`r mmnh$p.pv[[2]]`$|
+|Log Host Abundance      |$`r amnh$p.coeff[[2]]`$|$`r amnh$p.pv[[2]]`$|
+
+# Sensitivity to sequence clustering
+```{r}
+odonates <- read_csv("datasets_derived/odonate_summaries_otu97.csv")
+source("scripts/specialization_gam_models.r")
+
+pm97 <- summary(phylo_model)
+im97 <- summary(immune_model)
+mm97 <- summary(mass_model)
+am97 <- summary(abun_model)
+
+odonates <- read_csv("datasets_derived/odonate_summaries_otu90.csv")
+source("scripts/specialization_gam_models.r")
+
+pm90 <- summary(phylo_model)
+im90 <- summary(immune_model)
+mm90 <- summary(mass_model)
+am90 <- summary(abun_model)
+```
+|Model                   |Sequence similarity (%)|Estimate               |p-value             |
+|:-----------------------|:----------------------|:----------------------|:-------------------|
+|Host Phylogeny          |100                    |??                     |$`r pm$s.pv`$       |
+|Log Host Immune Response|100                    |$`r im$p.coeff[[2]]`$  |$`r im$p.pv[[2]]`$  |
+|Log Host Mass           |100                    |$`r mm$p.coeff[[2]]`$  |$`r mm$p.pv[[2]]`$  |
+|Log Host Abundance      |100                    |$`r am$p.coeff[[2]]`$  |$`r am$p.pv[[2]]`$  |
+|Host Phylogeny          |97                     |??                     |$`r pm97$s.pv`$     |
+|Log Host Immune Response|97                     |$`r im97$p.coeff[[2]]`$|$`r im97$p.pv[[2]]`$|
+|Log Host Mass           |97                     |$`r mm97$p.coeff[[2]]`$|$`r mm97$p.pv[[2]]`$|
+|Log Host Abundance      |97                     |$`r am97$p.coeff[[2]]`$|$`r am97$p.pv[[2]]`$|
+|Host Phylogeny          |90                     |??                     |$`r pm90$s.pv`$     |
+|Log Host Immune Response|90                     |$`r im90$p.coeff[[2]]`$|$`r im90$p.pv[[2]]`$|
+|Log Host Mass           |90                     |$`r mm90$p.coeff[[2]]`$|$`r mm90$p.pv[[2]]`$|
+|Log Host Abundance      |90                     |$`r am90$p.coeff[[2]]`$|$`r am90$p.pv[[2]]`$|
+
+
+![](../figures/pscale_phylo_plot_asv.svg)
+<p class = "caption">
+Distribution of mite ASVs across odonate phylogeny by mite specialization
+</p>
+
+![](../figures/pscale_phylo_plot_otu97.svg)
+<p class = "caption">
+Distribution of mite OTUs (97% similarity) across odonate phylogeny by mite specialization
+</p>
+
+![](../figures/pscale_phylo_plot_otu90.svg)
+<p class = "caption">
+Distribution of mite OTUs (90% similarity) across odonate phylogeny by mite specialization
+</p>
