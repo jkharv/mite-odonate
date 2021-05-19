@@ -4,7 +4,7 @@ library(GGally)
 library(network)
 library(bipartite)
 
-net <- read_csv("datasets_derived/bin_network.csv")
+net <- read_csv("datasets_derived/mite_sequences_otu90_annotated_bin_network.csv")
 
 net <- net %>%
   column_to_rownames("odonate_spp") %>%
@@ -16,4 +16,3 @@ net <- net[order(rowSums(net)),]
 #  as.network(matrix.type = "bipartite")
 
 plotweb(net, method = "normal")
-ggnet2(net, label = TRUE, color = "mode")
