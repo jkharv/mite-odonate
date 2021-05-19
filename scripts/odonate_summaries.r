@@ -10,9 +10,12 @@ library(phytools)
 
 odonate_summary <- function(mites_path){
   
-  odonates <- read_csv("datasets_derived/odonates_merged.csv")
+  # For some reason, readr has trouble finding the column type when it begins in a bunch
+  # of NAs. It guesses col_logical and then trips up when the values are not logical.
+  odonates <- read_csv("datasets_derived/odonates_merged.csv",
+                       col_types = cols(immune_response = col_double()))
   mites <- read_csv(mites_path)
-
+  
   # The 2015 data was collected using a standard sampling protocol.
   abundances <- odonates %>%
     filter(year(date) == 2015) %>%
@@ -32,13 +35,20 @@ odonate_summary <- function(mites_path){
     select(c(genus_species, mass)) %>%
     rename(species = genus_species)
   
+  immune_responses <- odonates %>%
+    drop_na(immune_response) %>%
+    select(c(genus_species, immune_response)) %>%
+    group_by(genus_species) %>%
+    summarise(across(everything(), mean)) %>%
+    rename(species = genus_species)
+  
   mite_spec <- mites %>%
     group_by(species) %>%
     select(7:last_col()) %>%
     summarise(across(.cols = everything(), sum))
   
   # Join these dataframes together
-  odonates <- list(abundances, masses, mite_spec) %>%
+  odonates <- list(abundances, masses, mite_spec, immune_responses) %>%
     reduce(function(x, y) full_join(x, y, by = "species")) 
   
   # Add a column for suborder which will be useful later for plots.
