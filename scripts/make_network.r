@@ -60,12 +60,15 @@ make_network <- function(seq_file) {
   # Get rid of junk cols, only need the asv counts
   mites <- mites %>%
     select(!contains(c("sequence", "phylum" , "class" , "order" , "family" , "genus" , "species"))) %>%
+    column_to_rownames(var = "mite") %>%
     select(2:last_col())
   
   mites <- varianceStabilizingTransformation(as.matrix(mites) + 1, fitType = "local")
-  
+
   mites <- mites %>% 
     as.data.frame() %>%
+    # IDK for some reason, DESEQ2 creates invalid col names which start with a num????????
+    rename_with(~ paste("X", .x, sep = "")) %>%
     select(matches("(X[[:digit:]]{4}_[[:digit:]]{1,2})")) %>% #Exclude the control samples
     t() %>%
     as.matrix()

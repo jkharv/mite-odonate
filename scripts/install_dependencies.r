@@ -9,5 +9,7 @@ remotes::install_github("jkharv/MRFtools")
 
 BiocManager::install("phyloseq")
 BiocManager::install("DESeq2")
+BiocManager::install("muscle")
+install.packages("phangorn")
 remotes::install_github("mikemc/speedyseq")
 remotes::install_github("YuLab-SMU/ggtree")

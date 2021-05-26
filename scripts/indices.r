@@ -4,7 +4,7 @@ library(picante)
 library(tidyverse)
 
 calc_indices <- function(file_path){  
-
+  
   bin_network <- read_csv(file_path)
   
   # Filtering out species that we don't have in our phylogeny.
